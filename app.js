@@ -6,6 +6,7 @@ var cookierParser = require("cookie-parser");
 var app = express();
 
 var index = require('./routes/index');
+var mailServer = require('./routes/mailRoutes');
 //var appRoutes = require('./routes/appRoutes');
 
 /** Configuración de la vista */
@@ -45,6 +46,7 @@ app.use(function(req, res, next) {
 
 //API's
 app.use('/', index);
+app.use('/api/sendMail', mailServer);
 
 // error handlers
 // catch 404 and forward to error handler

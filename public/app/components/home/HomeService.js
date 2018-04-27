@@ -1,7 +1,7 @@
 myApp.factory('HomeService', ['$rootScope', 'RestServiceUtil', '$log', function($rootScope, RestServiceUtil, $log) {
 
     var request = {};
-    var endpoint = '/api/mailService'
+    var endpoint = '/api/sendMail'
 
     return {
         sendEmail: function(data) {
