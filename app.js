@@ -33,7 +33,7 @@ app.use(function(req, res, next) {
 
 //API's
 app.use('/', index);
-app.use('/api/sendMail', mailServer);
+app.use('/api', mailServer);
 
 // error handlers
 // catch 404 and forward to error handler

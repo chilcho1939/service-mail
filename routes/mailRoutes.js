@@ -2,7 +2,14 @@ var express = require('express');
 var router = express.Router();
 var nodemailer = require('nodemailer');
 
-router.get('api/sendMail', (req, res) => {
+router.get('/saludar', (req, res) => {
+    console.log('Me la pelan turistas');
+    res.status(200).json({
+      message: 'success'
+    });
+});
+
+router.get('/sendMail', (req, res) => {
     var transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
