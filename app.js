@@ -5,7 +5,6 @@ var bodyParser = require("body-parser");
 var cookierParser = require("cookie-parser");
 var app = express();
 
-var index = require('./routes/index');
 var mailServer = require('./routes/mailRoutes');
 
 /** Configuración de la vista */
@@ -32,7 +31,6 @@ app.use(function(req, res, next) {
 });
 
 //API's
-app.use('/', index);
 app.use('/api', mailServer);
 
 // error handlers
