@@ -7,25 +7,12 @@ var app = express();
 
 var index = require('./routes/index');
 var mailServer = require('./routes/mailRoutes');
-//var appRoutes = require('./routes/appRoutes');
 
 /** Configuración de la vista */
 app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'hbs');
 
 app.use('/node_modules', express.static(__dirname + '/node_modules'));
-
-/**Agregando nuestro proyecto angular */
-app.use('/', express.static(__dirname + '/public/app'));
-
-/**Cachando url's de angular */
-// app.all(/^\/$/, (req, res) => {
-//     res.redirect('/');
-// });
-
-// app.use('/', (req, res) => {
-//     res.sendFile(__dirname + '/public/index.html');
-// });
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
