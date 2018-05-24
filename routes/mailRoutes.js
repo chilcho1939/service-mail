@@ -2,6 +2,21 @@ var express = require('express');
 var router = express.Router();
 var nodemailer = require('nodemailer');
 
+// let smtpConfig = {
+//     host: 'smtp.example.com',
+//     port: 587,
+//     secure: false, // upgrade later with STARTTLS
+//     auth: {
+//         user: 'username',
+//         pass: 'password'
+//     }
+// };
+// service: 'gmail',
+// auth: {
+//   user: 'chilcho1939@gmail.com',
+//   pass: '01049119391945Gil'
+// }
+
 router.get('/saludar', (req, res) => {
     console.log('Me la pelan turistas');
     res.status(200).json({
@@ -11,18 +26,20 @@ router.get('/saludar', (req, res) => {
 
 router.get('/sendMail', (req, res) => {
     var transporter = nodemailer.createTransport({
-        service: 'gmail',
+        host: 'smtp.betostrucking.com',
+        port: 587,
+        secure: false, // upgrade later with STARTTLS
         auth: {
-          user: 'chilcho1939@gmail.com',
-          pass: '01049119391945Gil'
+            user: 'ventas@betostrucking.com',
+            pass: '05*Abril/2018'
         }
       });
       
       var mailOptions = {
-        from: 'chilcho1939@gmail.com',
-        to: 'ing.gildardomercado@gmail.com',
-        subject: 'Sending Email using Node.js',
-        text: 'That was easy!'
+        from: 'ventas@betostrucking.com',
+        to: 'ventas@betostrucking.com',
+        subject: req.body.subject,
+        text: req.body.message
       };
             
       transporter.sendMail(mailOptions, function(error, info){
