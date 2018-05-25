@@ -27,7 +27,8 @@ router.post('/sendMail', (req, res) => {
         if (error) {
             console.log(error);
             res.status(500).json({
-                message: 'Error, no se pudo enviar el correo'
+                message: 'Error, no se pudo enviar el correo',
+                error: error
             });
         }
         else {
