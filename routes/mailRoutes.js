@@ -18,11 +18,16 @@ router.post('/sendMail', (req, res) => {
         }, tls: {rejectUnauthorized: false}
     });
     var mailOptions = {
-        from: 'ventas@betostrucking.com'
+        from: 'contacto@betostrucking.com'
         , to: 'ventas@betostrucking.com'
         , subject: req.body.subject
         , text: req.body.message
     };
+    if(req.body.subject == '' || req.body.text == '') {
+      res.status(500).json({
+        message: 'Error, parametros incompletos'
+      });
+    }
     transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
             console.log(error);
