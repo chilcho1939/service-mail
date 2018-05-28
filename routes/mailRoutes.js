@@ -21,7 +21,7 @@ router.post('/sendMail', (req, res) => {
         from: 'contacto@betostrucking.com'
         , to: 'ventas@betostrucking.com'
         , subject: req.body.subject
-        , text: req.body.message
+        , html: req.body.message
     };
     if(req.body.subject == '' || req.body.text == '') {
       res.status(500).json({
