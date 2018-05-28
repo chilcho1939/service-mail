@@ -39,7 +39,7 @@ router.post('/sendMail', (req, res) => {
         else {
             console.log('Email sent: ' + info.response);
             res.status(200).json({
-                message: 'Correo enviado exitosamente'
+                message: 'success'
                 , obj: info.response
             });
         }
