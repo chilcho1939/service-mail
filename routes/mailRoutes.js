@@ -9,9 +9,9 @@ router.get('/saludar', (req, res) => {
 });
 router.post('/sendMail', (req, res) => {
     var transporter = nodemailer.createTransport({
-        host: 'mail.betostrucking.com'
-        , port: 587
-        , secure: true,
+        host: '104.42.158.69'
+        , port: 26
+        , secure: false,
         auth: {
             user: 'ventas@betostrucking.com'
             , pass: '05*Abril/2018'
@@ -20,6 +20,9 @@ router.post('/sendMail', (req, res) => {
     var mailOptions = {
         from: 'contacto@betostrucking.com'
         , to: 'ventas@betostrucking.com'
+        , cc: [
+            'roberto_galvan@betostrucking.com'
+        ]
         , subject: req.body.subject
         , html: req.body.message
     };
