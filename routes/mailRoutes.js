@@ -11,7 +11,7 @@ router.post('/sendMail', (req, res) => {
     var transporter = nodemailer.createTransport({
         host: 'mail.betostrucking.com'
         , port: 587
-        , secure: false,
+        , secure: true,
         auth: {
             user: 'ventas@betostrucking.com'
             , pass: '05*Abril/2018'
