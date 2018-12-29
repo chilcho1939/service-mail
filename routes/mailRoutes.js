@@ -14,7 +14,7 @@ router.post('/sendMail', (req, res) => {
         , secure: false,
         auth: {
             user: 'ventas@betostrucking.com'
-            , pass: '05*Abril/2018'
+            , pass: 'n~j622eC'
         }, tls: {rejectUnauthorized: false}
     });
     var mailOptions = {
