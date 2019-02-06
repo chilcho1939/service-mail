@@ -7,11 +7,13 @@ var app = express();
 
 var mailServer = require('./routes/mailRoutes');
 
-/** Configuración de la vista */
+/** Configuración de la vista interna del server*/
 app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'hbs');
 
 app.use('/node_modules', express.static(__dirname + '/node_modules'));
+/* Vistas del proyecto angularjs */
+app.use(express.static(__dirname + '/public'));
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -19,7 +21,6 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 app.use(cookierParser());
-app.use(express.static(path.join(__dirname, '/public')));
 
 //This block is for avoid any CORS(Cross Origin RequestS) erros
 //Request coming from different origin than the server
@@ -33,7 +34,7 @@ app.use(function(req, res, next) {
 //API's
 app.use('/api', mailServer);
 
-// error handlers
+/* error handlers*/
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     return res.render('error');
