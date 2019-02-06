@@ -3,9 +3,21 @@ var logger = require("morgan");
 var path = require("path");
 var bodyParser = require("body-parser");
 var cookierParser = require("cookie-parser");
+var mongoose = require("mongoose");
 var app = express();
 
+/* Database connection */
+mongoose.connect('mongodb+srv://maildevelop:maildevelop@clustermailservice-ofo7q.gcp.mongodb.net/mailServices', {
+        useNewUrlParser: true
+    }).then(() => {
+    console.log("Conectado a la base de datos");
+}).catch((error) => { 
+    console.log("Error conectando a la base de datos: " + error);
+});
+
+//Api routes
 var mailServer = require('./routes/mailRoutes');
+var userRoutes = require('./routes/userRoutes');
 
 /** Configuración de la vista interna del server*/
 app.set('views', path.join(__dirname, '/views'));
@@ -32,7 +44,8 @@ app.use(function(req, res, next) {
 });
 
 //API's
-app.use('/api', mailServer);
+app.use('/api/mail', mailServer);
+app.use('/api/login', userRoutes);
 
 /* error handlers*/
 // catch 404 and forward to error handler

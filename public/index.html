@@ -6,7 +6,21 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.5">
-    <link rel="stylesheet" href="resources/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="resources/css/bootstrap.css">
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="resources/images/icons/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="resources/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="resources/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+    <link rel="stylesheet" type="text/css" href="resources/vendor/animate/animate.css">
+    <link rel="stylesheet" type="text/css" href="resources/vendor/css-hamburgers/hamburgers.min.css">
+    <link rel="stylesheet" type="text/css" href="resources/vendor/animsition/css/animsition.min.css">
+    <link rel="stylesheet" type="text/css" href="resources/vendor/select2/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="resources/vendor/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" type="text/css" href="resources/css/util.css">
+    <link rel="stylesheet" type="text/css" href="resources/css/login.css">
+    <!--===============================================================================================-->
+
+
 </head>
 
 <body ng-app="myApp">
@@ -16,6 +30,19 @@
     <script type="text/javascript" src="resources/js/angular-1.7.6/angular-ui-router.js"></script>
     <script type="text/javascript" src="resources/js/bootstrap.js"></script>
     <script type="text/javascript" src="app/app.js"></script>
+
+
+    <!--Additional-->
+    <!--===============================================================================================-->
+    <script src="resources/vendor/animsition/js/animsition.min.js"></script>
+    <script src="resources/vendor/bootstrap/js/popper.js"></script>
+    <script src="resources/vendor/select2/select2.min.js"></script>
+    <script src="resources/vendor/daterangepicker/moment.min.js"></script>
+    <script src="resources/vendor/daterangepicker/daterangepicker.js"></script>
+    <script src="resources/vendor/countdowntime/countdowntime.js"></script>
+    <script src="resources/js/main.js"></script>
+
+
     <!--Configuration-->
     <script type="text/javascript" src="app/config/config.state-provider.js"></script>
 
@@ -23,40 +50,9 @@
     <script type="text/javascript" src="app/components/login/LoginCtrl.js"></script>
 
     <!--Site content-->
-    <div class="page-wrapper">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">Navbar</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
-                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Features</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Pricing</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                            Dropdown link
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-        <div ui-view></div>
-    </div>
+    <!--Nav Bar-->
+    <div ng-include='"app/commons/layouts/header.html"'></div>
+    <div ui-view></div>
 </body>
 
 </html>

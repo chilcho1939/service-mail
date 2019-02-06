@@ -1,3 +1,4 @@
-myApp.controller('LoginCtrl', ['$scope', function ($scope) {
-    $scope.palabra = 'culitos';
+myApp.controller('LoginCtrl', ['$scope','LoginService', function ($scope, LoginService) {
+    $scope.user = {};
+
 }]);

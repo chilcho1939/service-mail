@@ -1,0 +1,3 @@
+myApp.factory('Utils', ['', function () {
+
+}]);
