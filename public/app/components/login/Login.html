@@ -3,42 +3,49 @@
         <div class="container-login100">
             <div class="wrap-login100">
                 <div class="login100-form-title" style="background-image: url(resources/images/bg-01.jpg);">
-                    <span class="login100-form-title-1">
+                    <span ng-if="login" class="login100-form-title-1">
                         Inicio de sesión
                     </span>
+                    <span ng-if="!login" class="login100-form-title-1">
+                        Registrarse
+                    </span>
                 </div>
-
-                <form class="login100-form validate-form">
-                    <div class="wrap-input100 validate-input m-b-26" data-validate="Username is required">
-                        <span class="label-input100">Username</span>
-                        <input class="input100" type="text" ng-model="user.username" name="username" placeholder="Enter username">
+                <form class="login100-form validate-form" name="loginForm" id="loginForm">
+                    <div class="wrap-input100 validate-input m-b-26" data-validate="Email is required">
+                        <span class="label-input100">Email</span>
+                        <input class="input100" type="email" ng-model="user.email" name="email" placeholder="Enter email" required>
                         <span class="focus-input100"></span>
                     </div>
-
                     <div class="wrap-input100 validate-input m-b-18" data-validate="Password is required">
                         <span class="label-input100">Password</span>
-                        <input class="input100" type="password" ng-model="user.password" name="pass" placeholder="Enter password">
-                        <span class="focus-input100"></span>
+                        <input class="input100" type="password" ng-model="user.password" name="pass" placeholder="Enter password" required <span class="focus-input100"></span>
                     </div>
-
-                    <div class="flex-sb-m w-full p-b-30">
+                    <div ng-if="!login" class="wrap-input100 validate-input m-b-18" data-validate="Password is required">
+                        <span class="label-input100">Confirmar Password</span>
+                        <input class="input100" type="password" ng-model="user.confirmPassword" name="pass" placeholder="Enter password" required <span class="focus-input100"></span>
+                    </div>
+                    <div ng-if="login" class="flex-sb-m w-full p-b-30">
                         <div class="contact100-form-checkbox">
                             <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
                             <label class="label-checkbox100" for="ckb1">
-                                Remember me
+                                Recuérdame
                             </label>
                         </div>
 
-                        <div>
+                        <div ng-if="login">
                             <a href="#" class="txt1">
-                                Forgot Password?
+                                ¿Olvidaste la contraseña?
                             </a>
                         </div>
                     </div>
-
-                    <div class="container-login100-form-btn">
-                        <button class="login100-form-btn" ng-click="createUser();">
+                    <div ng-if="login" class="container-login100-form-btn">
+                        <button class="login100-form-btn" ng-click="createUser();" ng-disabled="!loginForm.$valid">
                             Login
+                        </button>
+                    </div>
+                    <div ng-if="!login" class="container-login100-form-btn">
+                        <button class="login100-form-btn" ng-click="createUser();" ng-disabled="!loginForm.$valid">
+                            Registrar
                         </button>
                     </div>
                 </form>

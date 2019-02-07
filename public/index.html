@@ -23,8 +23,9 @@
 
 </head>
 
-<body ng-app="myApp">
+<body ng-app="myApp" ng-controller="MasterCtrl">
     <script type="text/javascript" src="resources/js/jquery.js"></script>
+    <script type="text/javascript" src="resources/js/notify.js"></script>
     <script type="text/javascript" src="resources/js/bootstrap.js"></script>
     <script type="text/javascript" src="resources/js/angular-1.7.6/angular.js"></script>
     <script type="text/javascript" src="resources/js/angular-1.7.6/angular-ui-router.js"></script>
@@ -44,11 +45,17 @@
 
 
     <!--Configuration-->
+    <script type="text/javascript" src="app/config/run.js"></script>
     <script type="text/javascript" src="app/config/config.state-provider.js"></script>
+    <script type="text/javascript" src="app/constants/Constants.js"></script>
+    <script type="text/javascript" src="app/utils/Utils.js"></script>
 
     <!--Controllers-->
     <script type="text/javascript" src="app/components/login/LoginCtrl.js"></script>
+    <script type="text/javascript" src="app/components/MasterCtrl.js"></script>
 
+    <!--Services-->
+    <script type="text/javascript" src="app/components/login/LoginService.js"></script>
     <!--Site content-->
     <!--Nav Bar-->
     <div ng-include='"app/commons/layouts/header.html"'></div>

@@ -3,6 +3,6 @@ myApp.constant('Constants', {
     SUCCESS_RESPONSE_CODE: 'ok',
     ERROR_RESPONSE_CODE: 'error',
     /* ENDPOINTS REST*/
-    ENDPOINT_CREATE_USER: "/api/login/registrar",
+    ENDPOINT_CREATE_USER: "/login/registrar",
 
 });

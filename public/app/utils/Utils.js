@@ -1,12 +1,11 @@
-myApp.factory('Utils', ['$http', 'Constants','$q', function ($http, Constants, $q) {
+myApp.factory('Utils', ['$http', 'Constants', '$q', function($http, Constants, $q) {
     return {
-        ApiRequest: function (args) {
-            var args = {};
+        ApiRequest: function(args) {
             // Let's retrieve the token from the cookie, if available
             //$http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
             params = args.params || {};
             args = args || {};
-            var url = args.api || '',
+            var url = args.url || '',
                 method = args.method || "GET",
                 params = params,
                 data = args.data || {};

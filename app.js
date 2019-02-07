@@ -8,10 +8,10 @@ var app = express();
 
 /* Database connection */
 mongoose.connect('mongodb+srv://maildevelop:maildevelop@clustermailservice-ofo7q.gcp.mongodb.net/mailServices', {
-        useNewUrlParser: true
-    }).then(() => {
+    useNewUrlParser: true
+}).then(() => {
     console.log("Conectado a la base de datos");
-}).catch((error) => { 
+}).catch((error) => {
     console.log("Error conectando a la base de datos: " + error);
 });
 
