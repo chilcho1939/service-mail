@@ -18,11 +18,13 @@ router.post('/registrar', function (req, res, next) {
         user.save().then(result => { 
             res.status(201).json({
                 message: 'Usuario creado exitosamente',
-                result: result
+                result: result,
+                code: 'ok'
             });
         }).catch(err => { 
             res.status(500).json({
-                error: err
+                error: err,
+                code: 'error'
             })
         });
     });
