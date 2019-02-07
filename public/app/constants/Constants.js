@@ -4,5 +4,6 @@ myApp.constant('Constants', {
     ERROR_RESPONSE_CODE: 'error',
     /* ENDPOINTS REST*/
     ENDPOINT_CREATE_USER: "/login/registrar",
+    ENDPOINT_LOGIN_USER: "/login/iniciarSesion"
 
 });
