@@ -4,8 +4,9 @@ const User = require("../models/User");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const checkAuth = require("../middleware/check-auth");
 
-router.post('/iniciarSesion', function (req, res, next) {
+router.post('/iniciarSesion', function(req, res, next) {
     let fetchedUser;
     User.find({ email: req.body.email }).then(user => {
         if (!user) {
@@ -16,7 +17,7 @@ router.post('/iniciarSesion', function (req, res, next) {
         fetchedUser = user;
         return bcrypt.compare(req.body.password, user[0].password);
     }).then(result => {
-        if (!result) { 
+        if (!result) {
             return res.status(401).json({
                 message: "La autenticación falló"
             });
@@ -29,7 +30,8 @@ router.post('/iniciarSesion', function (req, res, next) {
         });
         res.status(200).json({
             code: 'ok',
-            token: token
+            token: token,
+            expiresIn: 3600
         })
     }).catch(err => {
         return res.status(401).json({

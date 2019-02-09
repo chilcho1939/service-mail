@@ -1,12 +1,12 @@
-myApp.controller('LoginCtrl', ['$scope', 'LoginService', '$log', function ($scope, LoginService, $log) {
+myApp.controller('LoginCtrl', ['$scope', 'LoginService', '$log', '$state', function($scope, LoginService, $log, $state) {
     $scope.user = {};
     $scope.login = true;
 
     /**
      * Método que crea nuevos usuarios en la base de datos
      */
-    $scope.createUser = function () {
-        LoginService.signin($scope.user).then(data => {
+    $scope.createUser = function() {
+        LoginService.signup($scope.user).then(data => {
             if (data) {
                 $.notify('Usuario registrado correctamente', {
                     type: 'success',
@@ -18,16 +18,20 @@ myApp.controller('LoginCtrl', ['$scope', 'LoginService', '$log', function ($scop
             $.notify('Error al crear el usuario: ' + error, {
                 type: 'error',
                 position: "top right"
-            })
+            });
         });
     };
 
-    $scope.login = function () { 
-        LoginService.login($scope.user).then(data => { 
-            if (data) { 
-                console.log(data);
+    $scope.login = function() {
+        LoginService.login($scope.user).then(data => {
+            if (data) {
+                $state.go('home');
+            } else {
+                $.notify('Error al iniciar sesión',
+                    'error', { position: "top right" }
+                );
             }
-        }).catch(err => { 
+        }).catch(err => {
             $log.error("Error al iniciar sesión: " + err);
         })
     }
