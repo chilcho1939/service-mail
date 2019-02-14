@@ -1,12 +1,12 @@
 myApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function($stateProvider, $urlRouterProvider, $httpProvider) {
-    $stateProvider.state('login', {
+    $stateProvider.state('/', {
+            url: '/',
+            templateUrl: 'app/components/home/Home.html',
+            controller: 'HomeCtrl'
+        }).state('login', {
         url: '/login',
         templateUrl: 'app/components/login/Login.html',
         controller: 'LoginCtrl'
-    }).state('home', {
-        url: '/home',
-        templateUrl: 'app/components/home/Home.html',
-        controller: 'HomeCtrl'
     });
     /*
             .state('unauthorized',{

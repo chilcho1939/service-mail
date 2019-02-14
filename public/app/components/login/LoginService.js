@@ -1,31 +1,46 @@
 myApp.factory('LoginService', ['$rootScope', 'Constants', 'Utils', '$log', '$window', '$state', function($rootScope, Constants, Utils, $log, $window, $state) {
     var timer;
-    return {
-        login: function(user) {
+    var loginOperations = {
+        login: function (user) {
             return Utils.ApiRequest({
                 url: $rootScope.app.context + Constants.ENDPOINT_LOGIN_USER,
                 method: 'POST',
                 data: user
             }).then(response => {
                 if (response.data.code == Constants.SUCCESS_RESPONSE_CODE) {
-                    saveAuthData(response.data.token, new Date(new Date().getTime() + (response.data.expiresIn * 1000)))
-                    return autoAuthUser();
+                    saveAuthData(response.data.token, new Date(new Date().getTime() + (response.data.expiresIn * 1000)), response.data.userId)
+                    return this.getUserInformation(response.data.userId);
                 }
             }).catch(error => {
                 $log.error("Error al iniciar sesión: " + error);
             })
         },
-        signup: function(user) {
+        signup: function (user) {
             return Utils.ApiRequest({
                 url: $rootScope.app.context + Constants.ENDPOINT_CREATE_USER,
                 method: 'POST',
                 data: user
             }).then(response => {
                 if (response.data.code == Constants.SUCCESS_RESPONSE_CODE) {
-
+                    return true;
                 }
             }).catch(error => {
                 $log.error("Error al crear el usuario: " + error);
+            })
+        },
+        isLoggedIn: function () {
+            return autoAuthUser();
+        },
+        getUserInformation: function (userId) {
+            return Utils.ApiRequest({
+                url: $rootScope.app.context + Constants.ENPOUNT_GET_USER_INFO + userId,
+                method: 'GET'
+            }).then(response => {
+                if (response.data.code == Constants.SUCCESS_RESPONSE_CODE) {
+                    return response.data;
+                }
+            }).catch(error => { 
+                $log.error('Error al obtener la información del usuario solicitado: ' + error);
             })
         },
         logout: function() {
@@ -34,6 +49,7 @@ myApp.factory('LoginService', ['$rootScope', 'Constants', 'Utils', '$log', '$win
             $state.go('login');
         }
     };
+    return loginOperations;
 
     function autoAuthUser() {
         var authData = getAuthData();
@@ -52,7 +68,7 @@ myApp.factory('LoginService', ['$rootScope', 'Constants', 'Utils', '$log', '$win
 
     function setAuthTimer(duration) {
         timer = setTimeout(() => {
-            this.logout();
+            loginOperations.logout();
         }, duration * 1000);
     }
 
@@ -60,23 +76,27 @@ myApp.factory('LoginService', ['$rootScope', 'Constants', 'Utils', '$log', '$win
         delete $window.localStorage.token;
         delete $window.localStorage.expirationDate;
         delete $window.localStorage.isAuthenticated;
+        delete $window.localStorage.userId;
         $rootScope.isAuthenticated = false;
     }
 
     function getAuthData() {
         var token = $window.localStorage.token;
         var expirationDate = $window.localStorage.expirationDate;
-        if (!token ||  !expirationDate) {
+        var userId = $window.localStorage.userId;
+        if (!token ||  !expirationDate || !userId) {
             return;
         }
         return {
             token: token,
-            expirationDate: new Date(expirationDate)
+            expirationDate: new Date(expirationDate),
+            userId: userId
         };
     }
 
-    function saveAuthData(token, expirationDate) {
+    function saveAuthData(token, expirationDate, userId) {
         $window.localStorage.token = token;
         $window.localStorage.expirationDate = expirationDate;
+        $window.localStorage.userId = userId;
     }
 }]);

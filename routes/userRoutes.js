@@ -6,6 +6,25 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const checkAuth = require("../middleware/check-auth");
 
+router.get('/userData/:userId', checkAuth, function (req, res, next) {
+    User.findById(req.params.userId).then(user => { 
+        if (!user) { 
+            return res.status(400).json({
+                message: 'El usuario solicitado no existe'
+            });
+        }
+        res.status(200).json({
+            code: 'ok',
+            email: user.email
+        });
+    }).catch(err => {
+        res.status(400).json({
+            message: 'El usuario no existe',
+            err: err
+        });
+    })
+});
+
 router.post('/iniciarSesion', function(req, res, next) {
     let fetchedUser;
     User.find({ email: req.body.email }).then(user => {
@@ -31,8 +50,9 @@ router.post('/iniciarSesion', function(req, res, next) {
         res.status(200).json({
             code: 'ok',
             token: token,
-            expiresIn: 3600
-        })
+            expiresIn: 3600,
+            userId: fetchedUser[0]._id
+        });
     }).catch(err => {
         return res.status(401).json({
             message: "La autenticación falló",

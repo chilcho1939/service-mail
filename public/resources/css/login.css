@@ -249,7 +249,7 @@ iframe {
 /*==================================================================
 [ Title form ]*/
 
-.login100-form-title {
+.loginForm-title {
     width: 100%;
     position: relative;
     z-index: 1;
@@ -267,7 +267,7 @@ iframe {
     padding: 70px 15px 74px 15px;
 }
 
-.login100-form-title-1 {
+.loginForm-title-1 {
     font-family: Poppins-Bold;
     font-size: 30px;
     color: #fff;
@@ -276,7 +276,7 @@ iframe {
     text-align: center;
 }
 
-.login100-form-title::before {
+.loginForm-title::before {
     content: "";
     display: block;
     position: absolute;
@@ -292,7 +292,7 @@ iframe {
 /*==================================================================
 [ Form ]*/
 
-.login100-form {
+.loginForm {
     width: 100%;
     display: -webkit-box;
     display: -webkit-flex;
@@ -434,7 +434,7 @@ input.input100 {
 /*------------------------------------------------------------------
 [ Button ]*/
 
-.container-login100-form-btn {
+.container-loginForm-btn {
     width: 100%;
     display: -webkit-box;
     display: -webkit-flex;
@@ -444,7 +444,7 @@ input.input100 {
     flex-wrap: wrap;
 }
 
-.login100-form-btn {
+.loginForm-btn {
     display: -webkit-box;
     display: -webkit-flex;
     display: -moz-box;
@@ -467,7 +467,7 @@ input.input100 {
     transition: all 0.4s;
 }
 
-.login100-form-btn:hover {
+.loginForm-btn:hover {
     background-color: #333333;
 }
 
@@ -476,13 +476,13 @@ input.input100 {
 [ Responsive ]*/
 
 @media (max-width: 576px) {
-    .login100-form {
+    .loginForm {
         padding: 43px 15px 57px 117px;
     }
 }
 
 @media (max-width: 480px) {
-    .login100-form {
+    .loginForm {
         padding: 43px 15px 57px 15px;
     }
     .label-input100 {

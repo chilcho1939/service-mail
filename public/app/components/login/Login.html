@@ -2,15 +2,15 @@
     <div class="limiter">
         <div class="container-login100">
             <div class="wrap-login100">
-                <div class="login100-form-title" style="background-image: url(resources/images/bg-01.jpg);">
-                    <span ng-if="login" class="login100-form-title-1">
+                <div class="loginForm-title" style="background-image: url(resources/images/bg-01.jpg);">
+                    <span ng-if="login" class="loginForm-title-1">
                         Inicio de sesión
                     </span>
-                    <span ng-if="!login" class="login100-form-title-1">
+                    <span ng-if="!login" class="loginForm-title-1">
                         Registrarse
                     </span>
                 </div>
-                <form class="login100-form validate-form" name="loginForm" id="loginForm">
+                <form class="loginForm validate-form" name="loginForm" id="loginForm">
                     <div class="wrap-input100 validate-input m-b-26" data-validate="Email is required">
                         <span class="label-input100">Email</span>
                         <input class="input100" type="email" ng-model="user.email" name="email" placeholder="Enter email" required>
@@ -38,13 +38,13 @@
                             </a>
                         </div>
                     </div>
-                    <div ng-if="login" class="container-login100-form-btn">
-                        <button class="login100-form-btn" ng-click="login();" ng-disabled="!loginForm.$valid">
+                    <div ng-if="login" class="container-loginForm-btn">
+                        <button class="loginForm-btn" ng-click="login();" ng-disabled="!loginForm.$valid">
                             Login
                         </button>
                     </div>
-                    <div ng-if="!login" class="container-login100-form-btn">
-                        <button class="login100-form-btn" ng-click="createUser();" ng-disabled="!loginForm.$valid">
+                    <div ng-if="!login" class="container-loginForm-btn">
+                        <button class="loginForm-btn" ng-click="createUser();" ng-disabled="!loginForm.$valid">
                             Registrar
                         </button>
                     </div>

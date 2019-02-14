@@ -1,4 +1,4 @@
-myApp.controller('LoginCtrl', ['$scope', 'LoginService', '$log', '$state', function($scope, LoginService, $log, $state) {
+myApp.controller('LoginCtrl', ['$scope', 'LoginService', '$log', '$state', '$rootScope', function ($scope, LoginService, $log, $state, $rootScope) {
     $scope.user = {};
     $scope.login = true;
 
@@ -25,9 +25,12 @@ myApp.controller('LoginCtrl', ['$scope', 'LoginService', '$log', '$state', funct
     $scope.login = function() {
         LoginService.login($scope.user).then(data => {
             if (data) {
-                $state.go('home');
+                $rootScope.user = {
+                    email: data.email
+                };
+                $state.go('/');
             } else {
-                $.notify('Error al iniciar sesión',
+                $.notify('Error al iniciar sesión, usuario o contraseña no validos',
                     'error', { position: "top right" }
                 );
             }
@@ -36,12 +39,16 @@ myApp.controller('LoginCtrl', ['$scope', 'LoginService', '$log', '$state', funct
         })
     }
 
-    $scope.changeView = function(data) {
+    $scope.isLoggedIn = function () { 
+        return LoginService.isLoggedIn();
+    }
+
+    function changeView(data) {
         $scope.login = data;
     };
 
     $scope.$on('changeStatus', function(event, data) {
         event.preventDefault();
-        $scope.changeView(data);
+        changeView(data);
     });
 }]);
