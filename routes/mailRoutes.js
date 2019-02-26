@@ -9,7 +9,7 @@ router.get('/saludar', (req, res) => {
 });
 router.post('/sendMail', (req, res) => {
     var transporter = nodemailer.createTransport({
-        host: '104.42.158.69'
+        host: 'mail.betostrucking.com'
         , port: 26
         , secure: false,
         auth: {
