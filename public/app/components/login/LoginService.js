@@ -37,6 +37,7 @@ myApp.factory('LoginService', ['$rootScope', 'Constants', 'Utils', '$log', '$win
                 method: 'GET'
             }).then(response => {
                 if (response.data.code == Constants.SUCCESS_RESPONSE_CODE) {
+                    $window.localStorage.email = response.data.email;
                     return response.data;
                 }
             }).catch(error => { 
@@ -77,6 +78,7 @@ myApp.factory('LoginService', ['$rootScope', 'Constants', 'Utils', '$log', '$win
         delete $window.localStorage.expirationDate;
         delete $window.localStorage.isAuthenticated;
         delete $window.localStorage.userId;
+        delete $window.localStorage.email;
         $rootScope.isAuthenticated = false;
     }
 
@@ -84,13 +86,15 @@ myApp.factory('LoginService', ['$rootScope', 'Constants', 'Utils', '$log', '$win
         var token = $window.localStorage.token;
         var expirationDate = $window.localStorage.expirationDate;
         var userId = $window.localStorage.userId;
+        var email = $window.localStorage.email;
         if (!token ||  !expirationDate || !userId) {
             return;
         }
         return {
             token: token,
             expirationDate: new Date(expirationDate),
-            userId: userId
+            userId: userId,
+            email : email
         };
     }
 

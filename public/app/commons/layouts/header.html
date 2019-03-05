@@ -47,12 +47,15 @@
                 <li ui-sref="login" class="nav-item pointer"><a class="nav-link" ng-click="changeView(true);">Iniciar
                         sesión</a></li>
             </ul>
-            <ul class="navbar-nav ml-auto" ng-if="isAuthenticated">
-                <li ui-sref="login" class="nav-item pointer"><a class="nav-link" ng-click="logout();">Cerrar sesión</a></li>
-            </ul>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" ng-if="isAuthenticated">{{user.email}}
-                <a class="dropdown-item" href="#">Perfil</a>
-            </div>
+            <li class="nav-item dropdown" ng-if="isAuthenticated">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                    <span style="color:white;">{{userLogged.email}}</span>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="nav-link" ng-click="logout();">Cerrar sesión</a>
+                </div>
+            </li>
         </div>
     </div>
 </nav>
