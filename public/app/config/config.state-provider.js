@@ -7,6 +7,10 @@ myApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function(
         url: '/login',
         templateUrl: 'app/components/login/Login.html',
         controller: 'LoginCtrl'
+    }).state('accounts', {
+        url: '/accounts',
+        templateUrl: 'app/components/account/Accounts.html',
+        controller: 'AccountsCtrl'
     });
     /*
             .state('unauthorized',{

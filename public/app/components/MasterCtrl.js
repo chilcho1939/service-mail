@@ -1,4 +1,4 @@
-myApp.controller('MasterCtrl', ['$scope', '$rootScope', '$window', 'LoginService', function($scope, $rootScope, $window, LoginService) {
+myApp.controller('MasterCtrl', ['$scope', '$rootScope', '$window', 'LoginService','$state', function($scope, $rootScope, $window, LoginService, $state) {
     $rootScope.isAuthenticated = LoginService.isLoggedIn();
     $scope.userLogged = $rootScope.isAuthenticated ? $rootScope.isAuthenticated : {};
 
@@ -8,12 +8,6 @@ myApp.controller('MasterCtrl', ['$scope', '$rootScope', '$window', 'LoginService
     $scope.logout = function() {
         LoginService.logout();
     }
-
-    // $scope.$watch('user', function (newValue, oldValue) {
-    //     if ($rootScope.user) {
-    //         $scope.userLogged.email = newValue.email;
-    //     }
-    // });
 
     $rootScope.$on('userData', function (event, data) { 
         event.preventDefault();

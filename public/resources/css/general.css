@@ -19,3 +19,18 @@
     left: 0;
     z-index: -1;
 }
+
+.labels-account {
+    text-align: right;
+    padding-top: 10px;
+}
+
+.text-box-account {
+    padding: 0px 0px 25px 0px
+}
+
+.wrap-generic {
+    background: transparent;
+    overflow: visible;
+    position: relative;
+}

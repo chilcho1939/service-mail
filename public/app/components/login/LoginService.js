@@ -33,7 +33,7 @@ myApp.factory('LoginService', ['$rootScope', 'Constants', 'Utils', '$log', '$win
         },
         getUserInformation: function (userId) {
             return Utils.ApiRequest({
-                url: $rootScope.app.context + Constants.ENPOUNT_GET_USER_INFO + userId,
+                url: $rootScope.app.context + Constants.ENDPOINT_GET_USER_INFO + userId,
                 method: 'GET'
             }).then(response => {
                 if (response.data.code == Constants.SUCCESS_RESPONSE_CODE) {

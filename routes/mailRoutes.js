@@ -4,7 +4,7 @@ var nodemailer = require('nodemailer');
 
 router.get('/saludar', (req, res) => {
     res.status(200).json({
-        message: 'success'
+        message: 'servicio arriba'
     });
 });
 router.post('/sendMail', (req, res) => {

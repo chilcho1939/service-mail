@@ -13,7 +13,8 @@ module.exports = (req, res, next) => {
         next();
     } catch (err) {
         res.status(401).json({
-            message: "La autenticación falló"
+            message: "La autenticación falló",
+            err: err
         });
     }
 
