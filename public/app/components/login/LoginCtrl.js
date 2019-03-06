@@ -25,9 +25,6 @@ myApp.controller('LoginCtrl', ['$scope', 'LoginService', '$log', '$state', '$roo
     $scope.login = function() {
         LoginService.login($scope.user).then(data => {
             if (data) {
-                // $rootScope.user = {
-                //     email: data.email
-                // };
                 $rootScope.$broadcast('userData', data.email);
                 $state.go('/');
             } else {
