@@ -9,7 +9,7 @@
                             <label>Host IP:</label>
                         </div>
                         <div class="col-md-3 text-box-account">
-                            <input type="text" id="host" class="form-control" ng-model="cuenta.host" placeholder="192.168.1.1" />
+                            <input type="text" id="host" class="form-control" ng-model="cuenta.host" placeholder="10.0.1.1" />
                         </div>
                         <div class="col-md-3 labels-account">
                             <label>Puerto:</label>
@@ -23,8 +23,9 @@
                             <label>Correo origen:</label>
                         </div>
                         <div class="col-md-3 text-box-account">
-                            <input type="text" id="sourceMail" class="form-control" ng-model="cuenta.sourceMail"
+                            <input type="text" id="sourceMail" class="form-control" ng-model="cuenta.sourceMail" ng-change="validateMail('from')"
                                 placeholder="somebody@gmail.com" />
+                            <div id="resultFrom"></div>
                         </div>
                         <div class="col-md-3 labels-account">
                             <label>Contraseña:</label>
@@ -38,14 +39,17 @@
                             <label>Correo destino (default):</label>
                         </div>
                         <div class="col-md-3 text-box-account">
-                            <input type="text" id="deliveryMail" class="form-control" ng-model="cuenta.deliveryMail"
-                                placeholder="somebody@gmail.com" />
+                            <input type="text" id="deliveryMail" class="form-control" ng-model="cuenta.deliveryMail" ng-change="validateMail('to')"
+                                placeholder="somebody@gmail.com" required/>
+                            <div id="result"></div>
                         </div>
                         <div class="col-md-3 labels-account">
                             <label>CC:</label>
                         </div>
                         <div class="col-md-3 text-box-account">
-                            <input type="text" id="ccAccount" class="form-control" ng-model="cuenta.ccMail" placeholder="somebody@gmail.com" />
+                            <input type="text" id="ccAccount" class="form-control" ng-model="cuenta.ccMail" ng-change="validateMail('cc')"
+                                placeholder="somebody@gmail.com" required/>
+                            <div id="resultCC"></div>
                         </div>
                     </div>
                     <div class="row">
