@@ -85,40 +85,25 @@ router.post('/updateAccount', checkAuth, function (req, res, next) {
         });
     }
     Account.findById(req.body.id).then((result, err) => {
-        var object = {};
         if (err) {
             return res.status(404).json({
                 message: 'El id proporcionado no existe, favor de revisar',
                 err: err
             });
         }
-        if (result) {
-            object = createObject(req.body);
-            Account.findByIdAndUpdate(req.body.id, object, (err) => {
-                if (err) {
-                    console.log(err)
-                    return res.status(500).json({
-                        message: 'Error al actualizar el registro',
-                        err: err
-                    })
-                }
-                res.status(200).json({
-                    message: 'Registro actualizado exitosamente'
-                });
-            });
-        } else {
-            object = createObject(req.body);
-            Account.findByIdAndUpdate(req.body.id, object, (err, doc) => {
-                if (err) return res.status(500).json({
+        var object = createObject(req.body);
+        Account.findByIdAndUpdate(req.body.id, object, (err) => {
+            if (err) {
+                console.log(err)
+                return res.status(500).json({
                     message: 'Error al actualizar el registro',
                     err: err
                 })
-                res.status(200).json({
-                    message: 'Registro actualizado exitosamente',
-                    result: doc
-                });
+            }
+            res.status(200).json({
+                message: 'Registro actualizado exitosamente'
             });
-        }
+        });
     })
 });
 
