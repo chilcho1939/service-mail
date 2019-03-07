@@ -10,7 +10,8 @@ const accountSchema = mongoose.Schema({
     registrationDate: { type: Date, required: true },
     registrationUser: { type: String, required: true },
     updateDate: { type: Date, required: true },
-    updateUser: { type: String, required: true }
+    updateUser: { type: String, required: true },
+    active: { type: String, required: true}
 });
 
 module.exports = mongoose.model("Account", accountSchema);
