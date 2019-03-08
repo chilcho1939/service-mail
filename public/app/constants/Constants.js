@@ -7,6 +7,10 @@ myApp.constant('Constants', {
     ENDPOINT_LOGIN_USER: "/login/iniciarSesion",
     ENDPOINT_GET_USER_INFO: "/login/userData/",
     /*ACCOUNT ENDPOINTS */
-    ENDPOINT_FINDALL_ACCOUNTS_BY_USER: "/accounts/findAllByUser"
+    ENDPOINT_FINDALL_ACCOUNTS_BY_USER: "/accounts/findAllByUser",
+    ENDPOINT_EDIT_ACCOUNT: "/accounts/updateAccount",
+    ENDPOINT_ADD_ACCOUNT: "/accounts/saveAccount",
+    ENDPOINT_DELETE_ACCOUNT: "/accounts/deleteAccount/",
+    ENDPOINT_GETBYID_ACCOUNT: "/accounts/getById/"
 
 });

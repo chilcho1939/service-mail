@@ -5,8 +5,15 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const checkAuth = require("../middleware/check-auth");
+const logger = require('log4js');
 
 router.get('/userData/:userId', checkAuth, function (req, res, next) {
+    if (!req.params.userId) { 
+        logger.error("Id de usuario requerido");
+        return res.status(401).json({
+            message: "Id de usuario requerido"
+        });
+    }
     User.findById(req.params.userId).then(user => { 
         if (!user) { 
             return res.status(400).json({
@@ -18,6 +25,7 @@ router.get('/userData/:userId', checkAuth, function (req, res, next) {
             email: user.email
         });
     }).catch(err => {
+        logger.error(err);
         res.status(400).json({
             message: 'El usuario no existe',
             err: err

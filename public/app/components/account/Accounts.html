@@ -2,45 +2,54 @@
     <div class="limiter">
         <div class="container-login100">
             <div class="wrap-generic">
+                <div id="loading-data" class="overlay">
+                    <div layout="row" layout-align="center center" layout-padding>
+                        <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
+                        <h4 class="text-center">Cargando...</h4>
+                    </div>
+                </div>
                 <h1 class="text-center" style="padding-bottom: 5%;">Mi cuenta de correo</h1>
                 <form class="accountsForm" id="accountsForm" name="accountsForm" ng-if="showForm">
                     <div class="row">
                         <div class="col-md-3 labels-account">
-                            <label>Host IP:</label>
+                            <label><span style="color:red;">*</span>Host:</label>
                         </div>
                         <div class="col-md-3 text-box-account">
-                            <input type="text" id="host" class="form-control" ng-model="cuenta.host" placeholder="10.0.1.1" />
+                            <input type="text" id="host" class="form-control" ng-model="cuenta.host" placeholder="10.0.1.1 ó smtp.mail.com"
+                                required />
                         </div>
                         <div class="col-md-3 labels-account">
-                            <label>Puerto:</label>
+                            <label><span style="color:red;">*</span>Puerto:</label>
                         </div>
                         <div class="col-md-3 text-box-account">
-                            <input type="text" id="port" class="form-control" ng-model="cuenta.port" placeholder="9012" />
+                            <input type="text" id="port" class="form-control" ng-model="cuenta.port" placeholder="9012"
+                                required />
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-3 labels-account">
-                            <label>Correo origen:</label>
+                            <label><span style="color:red;">*</span>Correo origen:</label>
                         </div>
                         <div class="col-md-3 text-box-account">
-                            <input type="text" id="sourceMail" class="form-control" ng-model="cuenta.sourceMail" ng-change="validateMail('from')"
-                                placeholder="somebody@gmail.com" />
+                            <input type="text" id="sourceMail" class="form-control" ng-model="cuenta.sourceMail"
+                                ng-change="validateMail('from')" placeholder="somebody@gmail.com" required />
                             <div id="resultFrom"></div>
                         </div>
                         <div class="col-md-3 labels-account">
-                            <label>Contraseña:</label>
+                            <label><span style="color:red;">*</span>Contraseña:</label>
                         </div>
                         <div class="col-md-3 text-box-account">
-                            <input type="password" id="passwordAccount" class="form-control" ng-model="cuenta.password" />
+                            <input type="password" id="passwordAccount" class="form-control" ng-model="cuenta.password"
+                                required />
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-3 labels-account">
-                            <label>Correo destino (default):</label>
+                            <label><span style="color:red;">*</span>Correo destino (default):</label>
                         </div>
                         <div class="col-md-3 text-box-account">
-                            <input type="text" id="deliveryMail" class="form-control" ng-model="cuenta.deliveryMail" ng-change="validateMail('to')"
-                                placeholder="somebody@gmail.com" required/>
+                            <input type="text" id="deliveryMail" class="form-control" ng-model="cuenta.deliveryMail"
+                                ng-change="validateMail('to')" placeholder="somebody@gmail.com" required />
                             <div id="result"></div>
                         </div>
                         <div class="col-md-3 labels-account">
@@ -48,7 +57,7 @@
                         </div>
                         <div class="col-md-3 text-box-account">
                             <input type="text" id="ccAccount" class="form-control" ng-model="cuenta.ccMail" ng-change="validateMail('cc')"
-                                placeholder="somebody@gmail.com" required/>
+                                placeholder="somebody@gmail.com" />
                             <div id="resultCC"></div>
                         </div>
                     </div>
@@ -67,7 +76,15 @@
                                 Cancelar</button>
                         </div>
                         <div class="col-md-2 text-right">
-                            <button class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> Guardar</button>
+                            <button class="btn btn-primary" ng-click="guardar()"><i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                Guardar</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-9"></div>
+                        <div class="col-md-3 text-right">
+                            <small id="formHelp" class="form-text text-muted"><span style="color:red;">*</span> Campos
+                                obligatorios</small>
                         </div>
                     </div>
                 </form>
@@ -106,7 +123,8 @@
                             <td ng-if="!item.active"><span style="color:red;"><i class="fa fa-power-off" aria-hidden="true"></i></span></td>
                             <td><button ng-click="registro(item);"><span style="color:green;"><i class="fa fa-pencil-square-o"
                                             aria-hidden="true"></i></span></button></td>
-                            <td><button><span style="color:red;"><i class="fa fa-times" aria-hidden="true"></i></span></button></td>
+                            <td><button ng-click="showModal(item.id)"><span style="color:red;"><i class="fa fa-times"
+                                            aria-hidden="true"></i></span></button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -114,3 +132,4 @@
         </div>
     </div>
 </div>
+<div ng-include='"app/commons/modals/DeleteAccountModal.html"'></div>

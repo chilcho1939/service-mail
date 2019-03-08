@@ -2,12 +2,20 @@ myApp.controller('AccountsCtrl', ['$scope', 'LoginService', 'AccountsService', f
     $scope.lista = [];
     $scope.cuenta = {};
     $scope.showForm = false;
+    var edit = false;
+    var user = {};
+    $scope.idToDelete;
 
     (function () {
-        var user = LoginService.isLoggedIn();
+        user = LoginService.isLoggedIn();
+        $("#loading-data").css("display", "block");
+
         if (user) {
+
+
             AccountsService.findAllByUser(user.email).then(data => {
                 $scope.lista = data || [];
+                $("#loading-data").css("display", "none");
             });
         } else {
             $.notify('No se ha iniciado sesión',
@@ -15,11 +23,117 @@ myApp.controller('AccountsCtrl', ['$scope', 'LoginService', 'AccountsService', f
                     position: "top right"
                 }
             );
+            $("#loading-data").css("display", "none");
         }
+
+
     })();
 
     $scope.validateMail = function (field) {
         validate(field);
+    }
+
+    $scope.registro = function (data) {
+        if (data) { //editar
+            $scope.cuenta = angular.copy(data);
+            $scope.showForm = true;
+            edit = true;
+        } else { //nuevo
+            $scope.cuenta = {};
+            $scope.showForm = true;
+            edit = false;
+        }
+    }
+
+    $scope.guardar = function () {
+        if (edit && validateRequest()) { //editar datos de cuenta existente con parámetros completos
+            $scope.cuenta.user = user.email;
+            AccountsService.editAccount($scope.cuenta).then(data => {
+                if (data) {
+                    $.notify('Información actualizada correctamente',
+                        'success', {
+                            position: "top right"
+                        }
+                    );
+                    $scope.cuenta = {};
+                    $scope.showForm = false;
+                    AccountsService.findAllByUser(user.email).then(data => {
+                        $scope.lista = data || [];
+                    });
+                }
+            });
+        } else if (!edit && validateRequest()) { //nueva cuenta parámetros completos
+            $scope.cuenta.user = user.email;
+            AccountsService.addAccount($scope.cuenta).then(data => {
+                if (data) {
+                    $.notify('Registro exitoso',
+                        'success', {
+                            position: "top right"
+                        }
+                    );
+                    $scope.cuenta = {};
+                    $scope.showForm = false;
+                    AccountsService.findAllByUser(user.email).then(data => {
+                        $scope.lista = data || [];
+                    });
+                }
+            });
+        } else { //parámetros incompletos
+            $.notify('Datos incompletos, favor de validar su información de captura',
+                'error', {
+                    position: "top right"
+                }
+            );
+        }
+    }
+
+    $scope.showModal = function (id) {
+        $scope.idToDelete = id;
+        $('#deleteAccountModal').modal({
+            show: true,
+            keyboard: true
+        });
+    }
+
+    $scope.delete = function () {
+        $('#deleteAccountModal').modal('hide');
+        AccountsService.removeAccount($scope.idToDelete).then(data => {
+            if (data) {
+                $.notify('Registro eliminado exitosamente',
+                    'success', {
+                        position: "top right"
+                    }
+                );
+                AccountsService.findAllByUser(user.email).then(data => {
+                    $scope.lista = data || [];
+                });
+            } else {
+                $.notify('Error al elminar registro',
+                    'error', {
+                        position: "top right"
+                    }
+                );
+            }
+        });
+    }
+
+    $scope.closeModal = function () {
+        $('#deleteAccountModal').modal('hide');
+    }
+
+    $scope.cancel = function () {
+        $scope.cuenta = {};
+        $scope.showForm = false;
+    }
+
+    function validateRequest() {
+        if (!$scope.cuenta.host || $scope.cuenta.host == '') return false;
+        if (!$scope.cuenta.port || $scope.cuenta.port == '') return false;
+        if (!$scope.cuenta.sourceMail || $scope.cuenta.sourceMail == '') return false;
+        if (!$scope.cuenta.password || $scope.cuenta.password == '') return false;
+        if (!$scope.cuenta.deliveryMail || $scope.cuenta.deliveryMail == '') return false;
+        if (!$scope.cuenta.host || $scope.cuenta.host == '') return false;
+        return true;
     }
 
     function validate(field) {
@@ -56,25 +170,5 @@ myApp.controller('AccountsCtrl', ['$scope', 'LoginService', 'AccountsService', f
         }
 
         return valid;
-    }
-
-    $scope.registro = function (data) { 
-        if (data) {//editar
-            $scope.cuenta = data;
-            $scope.showForm = true;
-            console.log(data)
-        } else { //nuevo
-            $scope.cuenta = {};
-            $scope.showForm = true;
-        }
-    }
-
-    $scope.guardar = function () { 
-        var request = {};
-    }
-
-    $scope.cancel = function () { 
-        $scope.cuenta = {};
-        $scope.showForm = false;
     }
 }]);
