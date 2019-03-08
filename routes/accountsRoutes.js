@@ -2,14 +2,16 @@ const express = require('express');
 const router = express.Router();
 const checkAuth = require("../middleware/check-auth");
 const Account = require('../models/Account');
-const bcrypt = require("bcrypt");
+const logger = require("../configs/log4js");
 
 router.post('/findAllByUser', checkAuth, function (req, res, next) {
+    logger.info("Buscando cuentas por usuario");
     Account.find({
         registrationUser: req.body.user
     }).then(results => {
         const records = [];
         if (results.length > 0) {
+            logger.debug("Consulta con resultados");
             results.forEach((item) => {
                 records.push({
                     id: item._id,
@@ -32,18 +34,24 @@ router.post('/findAllByUser', checkAuth, function (req, res, next) {
                 message: "Sin resultados para tu búsqueda",
                 code: 'ok'
             });
+            logger.info("Sin resultados para la busqueda");
         }
     }).catch(err => {
         res.status(500).json({
             message: "Error al obtener los registros",
             err: err
         });
+        logger.error("Error al obtener los registros por usuario: " + err);
     });
 });
 
 router.post('/saveAccount', checkAuth, function (req, res, next) {
+    logger.info("Guardando la nueva cuenta");
     try {
-        if (!validateData(req.body, 'create')) throw "Error, parametros incompletos";
+        if (!validateData(req.body, 'create')) { 
+            logger.error("Parámetros incompletos, favor de veririficar la petición");
+            throw "Error, parametros incompletos, favor de veririficar la petición";
+        }
     } catch (e) {
         return res.status(500).json({
             message: e
@@ -62,21 +70,23 @@ router.post('/saveAccount', checkAuth, function (req, res, next) {
         updateUser: req.body.updateUser,
         active: true
     });
-
     account.save().then(result => {
         res.status(201).json({
             message: 'Registro existoso',
             code: 'ok'
         });
+        logger.info("Guardado exitoso");
     }).catch(err => {
         res.status(500).json({
             message: 'Error al guardar el registro',
             err: err
         });
+        logger.error("Error al guardar la nueva cuenta:" + err);
     });
 });
 
 router.post('/updateAccount', checkAuth, function (req, res, next) {
+    logger.info("Actualizando información de la cuenta");
     try {
         if (!validateData(req.body, 'update')) throw "Error, parametros incompletos";
     } catch (e) {
