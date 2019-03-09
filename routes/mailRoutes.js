@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var nodemailer = require('nodemailer');
+const checkAuth = require("../middleware/check-auth");
+const logger = require('log4js');
+const User = require("../models/User");
 
 router.get('/saludar', (req, res) => {
     res.status(200).json({
@@ -45,4 +48,11 @@ router.post('/sendMail', (req, res) => {
         }
     });
 });
+
+router.put('/activateAccount/:token', checkAuth, function (req, res, next) { 
+    //proceso de activacion
+    User.findOne({ temporaryToken: req.params.token }, function (req, res) {
+
+    });
+})
 module.exports = router;

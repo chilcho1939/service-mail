@@ -11,6 +11,10 @@ myApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function(
         url: '/accounts',
         templateUrl: 'app/components/account/Accounts.html',
         controller: 'AccountsCtrl'
+    }).state('activate:token', {
+        url: '/activate',
+        templateUrl: 'app/components/activation/Activation.html',
+        controller: 'ActivationCtrl'
     });
     /*
             .state('unauthorized',{

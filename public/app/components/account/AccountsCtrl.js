@@ -9,10 +9,7 @@ myApp.controller('AccountsCtrl', ['$scope', 'LoginService', 'AccountsService', f
     (function () {
         user = LoginService.isLoggedIn();
         $("#loading-data").css("display", "block");
-
         if (user) {
-
-
             AccountsService.findAllByUser(user.email).then(data => {
                 $scope.lista = data || [];
                 $("#loading-data").css("display", "none");
@@ -25,8 +22,6 @@ myApp.controller('AccountsCtrl', ['$scope', 'LoginService', 'AccountsService', f
             );
             $("#loading-data").css("display", "none");
         }
-
-
     })();
 
     $scope.validateMail = function (field) {
@@ -47,6 +42,7 @@ myApp.controller('AccountsCtrl', ['$scope', 'LoginService', 'AccountsService', f
 
     $scope.guardar = function () {
         if (edit && validateRequest()) { //editar datos de cuenta existente con parámetros completos
+            $("#loading-data").css("display", "block");
             $scope.cuenta.user = user.email;
             AccountsService.editAccount($scope.cuenta).then(data => {
                 if (data) {
@@ -59,10 +55,12 @@ myApp.controller('AccountsCtrl', ['$scope', 'LoginService', 'AccountsService', f
                     $scope.showForm = false;
                     AccountsService.findAllByUser(user.email).then(data => {
                         $scope.lista = data || [];
+                        $("#loading-data").css("display", "none");
                     });
                 }
             });
         } else if (!edit && validateRequest()) { //nueva cuenta parámetros completos
+            $("#loading-data").css("display", "block");
             $scope.cuenta.user = user.email;
             AccountsService.addAccount($scope.cuenta).then(data => {
                 if (data) {
@@ -75,6 +73,7 @@ myApp.controller('AccountsCtrl', ['$scope', 'LoginService', 'AccountsService', f
                     $scope.showForm = false;
                     AccountsService.findAllByUser(user.email).then(data => {
                         $scope.lista = data || [];
+                        $("#loading-data").css("display", "none");
                     });
                 }
             });
@@ -84,6 +83,7 @@ myApp.controller('AccountsCtrl', ['$scope', 'LoginService', 'AccountsService', f
                     position: "top right"
                 }
             );
+            $("#loading-data").css("display", "none");
         }
     }
 
@@ -97,6 +97,7 @@ myApp.controller('AccountsCtrl', ['$scope', 'LoginService', 'AccountsService', f
 
     $scope.delete = function () {
         $('#deleteAccountModal').modal('hide');
+        $("#loading-data").css("display", "block");
         AccountsService.removeAccount($scope.idToDelete).then(data => {
             if (data) {
                 $.notify('Registro eliminado exitosamente',
@@ -106,6 +107,7 @@ myApp.controller('AccountsCtrl', ['$scope', 'LoginService', 'AccountsService', f
                 );
                 AccountsService.findAllByUser(user.email).then(data => {
                     $scope.lista = data || [];
+                    $("#loading-data").css("display", "none");
                 });
             } else {
                 $.notify('Error al elminar registro',
@@ -113,6 +115,7 @@ myApp.controller('AccountsCtrl', ['$scope', 'LoginService', 'AccountsService', f
                         position: "top right"
                     }
                 );
+                $("#loading-data").css("display", "none");
             }
         });
     }

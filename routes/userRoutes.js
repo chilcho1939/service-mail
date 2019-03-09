@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const checkAuth = require("../middleware/check-auth");
 const logger = require('log4js');
+const sgMail = require('@sendgrid/mail');
 
 router.get('/userData/:userId', checkAuth, function (req, res, next) {
     if (!req.params.userId) { 
@@ -72,17 +73,33 @@ router.post('/iniciarSesion', function(req, res, next) {
 router.post('/registrar', function(req, res, next) {
     bcrypt.hash(req.body.password, 10).then(hash => {
         const user = new User({
-            username: req.body.username,
             email: req.body.email,
+            username: req.body.username,
             password: hash,
-            address: req.body.address
+            temporaryToken: jwt.sign({
+                email: req.body.email
+            }, constants.SECRET_WORD, {
+                expiresIn: "1h"
+            })
         });
         user.save().then(result => {
             res.status(201).json({
-                message: 'Usuario creado exitosamente',
+                message: 'Usuario creado exitosamente, revisa tu correo para activar tu cuenta',
                 result: result,
                 code: 'ok'
             });
+            //send email to new user
+            sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+            const msg = {
+                to: req.body.email,
+                from: 'Gildardo Ortiz, chilcho1939@gmail.com',
+                subject: 'Gracias por unirte a nuestra red',
+                text: 'Bienvenido',
+                html: `<p>Hola ${user.username}, bienvenido al servicio de correos de Gildardo Ortiz.`
+                + ' Donde podrás integrar la funcionalidad de envío de correos a tu sitio web <strong>sin costo.</strong >' +
+                + ' Para activar tu cuenta, por favor da click en la siguiente dirección: <a href="http://localhost:8999/api/accounts/verificationEmail/activateAccount/" ' + user.temporaryToken + '">http://localhost:8999/api/accounts/verificationEmail/activateAccount</a></p>'
+            };
+            sgMail.send(msg);
         }).catch(err => {
             res.status(500).json({
                 error: err,
