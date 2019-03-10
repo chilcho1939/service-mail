@@ -11,6 +11,11 @@
                     </span>
                 </div>
                 <form class="loginForm validate-form" name="loginForm" id="loginForm" style="    background: #ebeeef;">
+                    <div ng-if="!login" class="wrap-input100 validate-input m-b-26" data-validate="Username is required">
+                        <span class="label-input100">Username</span>
+                        <input class="input100" type="text" ng-model="user.username" name="username" placeholder="Enter username" required>
+                        <span class="focus-input100"></span>
+                    </div>
                     <div class="wrap-input100 validate-input m-b-26" data-validate="Email is required">
                         <span class="label-input100">Email</span>
                         <input class="input100" type="email" ng-model="user.email" name="email" placeholder="Enter email" required>

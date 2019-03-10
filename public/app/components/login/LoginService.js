@@ -22,7 +22,7 @@ myApp.factory('LoginService', ['$rootScope', 'Constants', 'Utils', '$log', '$win
                 data: user
             }).then(response => {
                 if (response.data.code == Constants.SUCCESS_RESPONSE_CODE) {
-                    return true;
+                    return response.data;
                 }
             }).catch(error => {
                 $log.error("Error al crear el usuario: " + error);

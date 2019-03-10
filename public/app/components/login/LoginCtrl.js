@@ -8,17 +8,14 @@ myApp.controller('LoginCtrl', ['$scope', 'LoginService', '$log', '$state', '$roo
     $scope.createUser = function() {
         LoginService.signup($scope.user).then(data => {
             if (data) {
-                $.notify('Usuario registrado correctamente', {
-                    type: 'success',
-                    position: "top right"
-                });
+                $.notify(data.message, 'success', {position: "top right"});
+                $scope.user = {};
+            } else {
+                $.notify(data.message, 'error',{ position: "top right"});
             }
         }).catch(error => {
             $log.error('Error al registrar usuario:' + error);
-            $.notify('Error al crear el usuario: ' + error, {
-                type: 'error',
-                position: "top right"
-            });
+            $.notify('Error al crear el usuario: ' + error, 'error', {position: "top right"});
         });
     };
 

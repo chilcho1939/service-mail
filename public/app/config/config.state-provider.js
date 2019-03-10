@@ -12,7 +12,7 @@ myApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function(
         templateUrl: 'app/components/account/Accounts.html',
         controller: 'AccountsCtrl'
     }).state('activate:token', {
-        url: '/activate',
+        url: '/activate/:token',
         templateUrl: 'app/components/activation/Activation.html',
         controller: 'ActivationCtrl'
     });

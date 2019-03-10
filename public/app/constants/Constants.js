@@ -6,6 +6,7 @@ myApp.constant('Constants', {
     ENDPOINT_CREATE_USER: "/login/registrar",
     ENDPOINT_LOGIN_USER: "/login/iniciarSesion",
     ENDPOINT_GET_USER_INFO: "/login/userData/",
+    ENDPOINT_ACTIVATE_ACCOUNT: "/login/activateAccount/",
     /*ACCOUNT ENDPOINTS */
     ENDPOINT_FINDALL_ACCOUNTS_BY_USER: "/accounts/findAllByUser",
     ENDPOINT_EDIT_ACCOUNT: "/accounts/updateAccount",
