@@ -12,7 +12,7 @@ myApp.controller('MasterCtrl', ['$scope', '$rootScope', '$window', 'LoginService
     $rootScope.$on('userData', function (event, data) { 
         event.preventDefault();
         if (data) { 
-            $scope.userLogged.email = data;
+            $scope.userLogged = data;
             $rootScope.isAuthenticated = LoginService.isLoggedIn();
         }
     })

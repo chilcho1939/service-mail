@@ -15,7 +15,7 @@ router.get('/userData/:userId', checkAuth, function (req, res, next) {
             message: "Id de usuario requerido"
         });
     }
-    User.findById(req.params.userId).then(user => {
+    User.findOne({ _id: req.params.userId, active: true }).then(user => {
         if (!user) {
             return res.status(400).json({
                 message: 'El usuario solicitado no existe'
@@ -23,7 +23,8 @@ router.get('/userData/:userId', checkAuth, function (req, res, next) {
         }
         res.status(200).json({
             code: 'ok',
-            email: user.email
+            email: user.email,
+            username: user.username
         });
     }).catch(err => {
         logger.error(err);
@@ -75,46 +76,54 @@ router.post('/iniciarSesion', function (req, res, next) {
 });
 
 router.post('/registrar', function (req, res, next) {
-    bcrypt.hash(req.body.password, 10).then(hash => {
-        const user = new User({
-            email: req.body.email,
-            username: req.body.username,
-            password: hash,
-            temporaryToken: jwt.sign({
-                email: req.body.email
-            }, constants.SECRET_WORD, {
-                    expiresIn: "1h"
-                })
-        });
-        user.save().then(document => {
-            logger.info("usuario creado: " + JSON.stringify(document));
-            try {
-                logger.info("Enviando correo a: " + document.email);
-                sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-                const msg = {
-                    to: req.body.email,
-                    from: 'chilcho1939@gmail.com',
-                    subject: 'Gracias por unirte a nuestra red',
-                    text: 'Bienvenido',
-                    html: `<p>Hola ${user.username}, bienvenido al servicio de correos de Gildardo Ortiz.</p>`
-                        + '<p>Donde podrás integrar la funcionalidad de envío de correos a tu sitio web <strong>sin costo.</strong ></p>'
-                        + '<p>Para activar tu cuenta, por favor da click en la siguiente dirección: <a href="http://localhost:8999/#!/activate/'+user.temporaryToken+'">Activar cuenta</a></p>'
-                };
-                sgMail.send(msg);
-                logger.info("Correo envíado");
-                res.status(201).json({
-                    message: 'Usuario creado exitosamente, revisa tu correo para activar tu cuenta',
-                    code: 'ok'
-                });
-            } catch (e) {
-                logger.error(e);
-            }
-        }).catch(err => {
-            res.status(500).json({
-                error: err,
-                code: 'error'
+    User.findOne({ email: req.body.email }).then(user => {
+        if (user) {
+            logger.error("Error al registrar usuario, ya existe cuenta");
+            return res.status(401).json({
+                message: "El correo " + req.body.email + " ya existe en la base de datos"
             });
-            logger.error(err);
+        }
+        bcrypt.hash(req.body.password, 10).then(hash => {
+            const user = new User({
+                email: req.body.email,
+                username: req.body.username,
+                password: hash,
+                temporaryToken: jwt.sign({
+                    email: req.body.email
+                }, constants.SECRET_WORD, {
+                        expiresIn: "1h"
+                    })
+            });
+            user.save().then(document => {
+                logger.info("usuario creado: " + JSON.stringify(document));
+                try {
+                    logger.info("Enviando correo a: " + document.email);
+                    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+                    const msg = {
+                        to: req.body.email,
+                        from: 'chilcho1939@gmail.com',
+                        subject: 'Gracias por unirte a nuestra red',
+                        text: 'Bienvenido',
+                        html: `<p>Hola ${user.username}, bienvenido al servicio de correos de Gildardo Ortiz.</p>`
+                            + '<p>Donde podrás integrar la funcionalidad de envío de correos a tu sitio web <strong>sin costo.</strong ></p>'
+                            + '<p>Para activar tu cuenta, por favor da click en la siguiente dirección: <a href="http://localhost:8999/#!/activate/' + user.temporaryToken + '">Activar cuenta</a></p>'
+                    };
+                    sgMail.send(msg);
+                    logger.info("Correo envíado");
+                    res.status(201).json({
+                        message: 'Usuario creado exitosamente, revisa tu correo para activar tu cuenta',
+                        code: 'ok'
+                    });
+                } catch (e) {
+                    logger.error(e);
+                }
+            }).catch(err => {
+                res.status(500).json({
+                    error: err,
+                    code: 'error'
+                });
+                logger.error(err);
+            });
         });
     });
 });

@@ -11,7 +11,7 @@ myApp.controller('LoginCtrl', ['$scope', 'LoginService', '$log', '$state', '$roo
                 $.notify(data.message, 'success', {position: "top right"});
                 $scope.user = {};
             } else {
-                $.notify(data.message, 'error',{ position: "top right"});
+                $.notify("Error al crear el usuario", 'error',{ position: "top right"});
             }
         }).catch(error => {
             $log.error('Error al registrar usuario:' + error);
@@ -22,7 +22,7 @@ myApp.controller('LoginCtrl', ['$scope', 'LoginService', '$log', '$state', '$roo
     $scope.login = function() {
         LoginService.login($scope.user).then(data => {
             if (data) {
-                $rootScope.$broadcast('userData', data.email);
+                $rootScope.$broadcast('userData', data);
                 $state.go('/');
             } else {
                 $.notify('Error al iniciar sesión, usuario o contraseña no validos',
