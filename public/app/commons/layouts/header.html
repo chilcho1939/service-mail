@@ -1,34 +1,33 @@
 <!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
-    <div class="container">
-        <li ui-sref="/" class="element-li">
-            <a class="navbar-brand logo-font">
-                Servicio de correos
-            </a>
-        </li>
+<section class="page-header">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" style="background-color: #028E9B !important;">
+        <div class="container">
+            <li ui-sref="/" class="element-li">
+                <a class="navbar-brand logo-font">
+                    Servicio de correos
+                </a>
+            </li>
 
-        <!-- links toggle -->
-        <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#links" aria-controls="navbarResponsive"
-            aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <!-- account toggle -->
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#account" aria-controls="navbarResponsive"
-            aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+            <!-- links toggle -->
+            <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#links"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- account toggle -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#account" aria-controls="navbarResponsive"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <div class="collapse navbar-collapse" id="links">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item element-li active" ui-sref="/">
-                    <a class="nav-link">Inicio</a>
-                </li>
-                <!-- <li class="nav-item">
-                    <a class="nav-link" href="#">Acerca de nosotros</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Servicios</a>
-                </li>
+            <div class="collapse navbar-collapse" id="links">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item element-li" ui-sref="/">
+                        <a class="nav-link">Inicio</a>
+                    </li>
+                    <li id="accounts-lnk" class="nav-item element-li" ng-if="isAuthenticated">
+                        <a class="nav-link" ui-sref="accounts">Mis cuentas</a>
+                    </li>
+                <!--
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
@@ -40,29 +39,30 @@
                         <a class="dropdown-item" href="#">Dropdown 3</a>
                     </div>
                 </li> -->
-            </ul>
-        </div>
+                </ul>
+            </div>
 
-        <div class="collapse navbar-collapse" id="account">
-            <ul class="navbar-nav ml-auto" ng-if="!isAuthenticated">
-                <li ui-sref="login" class="nav-item pointer"><a class="nav-link" ng-click="changeView(false);">Registrar</a></li>
-                <li ui-sref="login" class="nav-item pointer"><a class="nav-link" ng-click="changeView(true);">Iniciar
-                        sesión</a></li>
-            </ul>
-            <ul class="navbar-nav ml-auto" ng-if="isAuthenticated">
-                <li class="nav-item dropdown element-li">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                        <span style="color:white;">{{userLogged.username}}</span>
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="nav-link" ui-sref="accounts">
-                            <span style="color:black;">Mis cuentas de correo</span></a>
-                        <a class="nav-link" ng-click="logout();">
-                            <span style="color:black;">Cerrar sesión</span></a>
-                    </div>
-                </li>
-            </ul>
+            <div class="collapse navbar-collapse" id="account">
+                <ul class="navbar-nav ml-auto" ng-if="!isAuthenticated">
+                    <li ui-sref="login" class="nav-item pointer"><a class="nav-link" ng-click="changeView(false);">Registrar</a></li>
+                    <li ui-sref="login" class="nav-item pointer"><a class="nav-link" ng-click="changeView(true);">Iniciar
+                            sesión</a></li>
+                </ul>
+                <ul class="navbar-nav ml-auto" ng-if="isAuthenticated">
+                    <li class="nav-item dropdown element-li">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            <span style="color:white;">{{userLogged.username}}</span>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="nav-link" ui-sref="accounts">
+                                <span style="color:black;">Mis cuentas</span></a>
+                            <a class="nav-link" ng-click="logout();">
+                                <span style="color:black;">Cerrar sesión</span></a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
+</section>

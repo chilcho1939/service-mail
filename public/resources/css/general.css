@@ -63,3 +63,27 @@
     color:white;
     cursor: pointer;
 }
+
+.color-uno {
+    color: #028E9B !important;
+}
+
+.color-dos {
+    color: #015C65 !important;
+}
+
+.color-tres {
+    color: #1E6D74 !important;
+}
+
+.color-cuatro {
+    color: #5EC4CD !important;
+} 
+
+.color-cinco {
+    color: #35C0CD !important;
+}
+
+.page-header {
+    margin-top: 55px;
+}

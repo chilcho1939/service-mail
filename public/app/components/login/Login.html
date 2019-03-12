@@ -27,8 +27,9 @@
                     </div>
                     <div ng-if="!login" class="wrap-input100 validate-input m-b-18" data-validate="Password is required">
                         <span class="label-input100">Confirmar Password</span>
-                        <input class="input100" type="password" ng-model="user.confirmPassword" name="pass" placeholder="Enter password" required <span class="focus-input100"></span>
+                        <input class="input100" type="password" ng-model="user.confirmPassword" name="pass" placeholder="Enter password" required <span class="focus-input100" ng-change="comparePasswords()"></span>
                     </div>
+                    <div id="passwordValidator"></div>
                     <div ng-if="login" class="flex-sb-m w-full p-b-30">
                         <div class="contact100-form-checkbox">
                             <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
