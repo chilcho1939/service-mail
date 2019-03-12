@@ -3,7 +3,6 @@ myApp.controller('AccountsCtrl', ['$scope', 'LoginService', 'AccountsService', f
     $scope.cuenta = {};
     $scope.showForm = false;
     $scope.idToDelete;
-    $scope.showAlert = false;
     $scope.listaTokens = [];
 
     var edit = false;
@@ -14,11 +13,12 @@ myApp.controller('AccountsCtrl', ['$scope', 'LoginService', 'AccountsService', f
         if (user) {
             AccountsService.findAllByUser(user.email).then(data => {
                 $scope.lista = data || [];
+                $scope.buttonNewDisabled = $scope.lista.length > 0 ? true : false;
                 $("#loading-data").css("display", "none");
             });
             LoginService.findTokensByUser(user.email).then(data => {
                 $scope.listaTokens = data || [];
-                $scope.buttonDisabled = $scope.listaTokens.length > 0 ? true : false;
+                $scope.buttonDisabled = $scope.lista.length > 0 && $scope.listaTokens.length == 0 ? false : true;
             });
         } else {
             $.notify('No se ha iniciado sesión',
@@ -61,6 +61,7 @@ myApp.controller('AccountsCtrl', ['$scope', 'LoginService', 'AccountsService', f
                     $scope.showForm = false;
                     AccountsService.findAllByUser(user.email).then(data => {
                         $scope.lista = data || [];
+                        $scope.buttonNewDisabled = $scope.lista.length > 0 ? true : false;
                         $("#loading-data").css("display", "none");
                     });
                 }
@@ -79,6 +80,7 @@ myApp.controller('AccountsCtrl', ['$scope', 'LoginService', 'AccountsService', f
                     $scope.showForm = false;
                     AccountsService.findAllByUser(user.email).then(data => {
                         $scope.lista = data || [];
+                        $scope.buttonNewDisabled = $scope.lista.length > 0 ? true : false;
                         $("#loading-data").css("display", "none");
                     });
                 }
@@ -93,8 +95,9 @@ myApp.controller('AccountsCtrl', ['$scope', 'LoginService', 'AccountsService', f
         }
     }
 
-    $scope.showModal = function (id) {
+    $scope.showModal = function (id, flag) {
         $scope.idToDelete = id;
+        $scope.flag = flag;
         $('#deleteAccountModal').modal({
             show: true,
             keyboard: true
@@ -104,26 +107,44 @@ myApp.controller('AccountsCtrl', ['$scope', 'LoginService', 'AccountsService', f
     $scope.delete = function () {
         $('#deleteAccountModal').modal('hide');
         $("#loading-data").css("display", "block");
-        AccountsService.removeAccount($scope.idToDelete).then(data => {
-            if (data) {
-                $.notify('Registro eliminado exitosamente',
-                    'success', {
-                        position: "top right"
-                    }
-                );
-                AccountsService.findAllByUser(user.email).then(data => {
-                    $scope.lista = data || [];
+        if ($scope.flag) { //eliminar cuenta
+            AccountsService.removeAccount($scope.idToDelete).then(data => {
+                if (data) {
+                    $.notify('Registro eliminado exitosamente',
+                        'success', {
+                            position: "top right"
+                        }
+                    );
+                    AccountsService.findAllByUser(user.email).then(data => {
+                        $scope.lista = data || [];
+                        $scope.buttonNewDisabled = $scope.lista.length > 0 ? true : false;
+                        $("#loading-data").css("display", "none");
+                    });
+                } else {
+                    $.notify('Error al elminar registro',
+                        'error', {
+                            position: "top right"
+                        }
+                    );
                     $("#loading-data").css("display", "none");
-                });
-            } else {
-                $.notify('Error al elminar registro',
-                    'error', {
-                        position: "top right"
-                    }
-                );
-                $("#loading-data").css("display", "none");
-            }
-        });
+                }
+            });
+        } else { //eliminar tokens
+            LoginService.removeToken($scope.idToDelete).then(data => {
+                if (data) { 
+                    $.notify('Token eliminado exitosamente',
+                        'success', {
+                            position: "top right"
+                        }
+                    );
+                    LoginService.findTokensByUser(user.email).then(data => {
+                        $scope.listaTokens = data || [];
+                        $scope.buttonDisabled = $scope.listaTokens.length > 0 ? true : false;
+                        $("#loading-data").css("display", "none");
+                    });
+                }
+            });
+        }
     }
 
     $scope.closeModal = function () {
@@ -138,7 +159,6 @@ myApp.controller('AccountsCtrl', ['$scope', 'LoginService', 'AccountsService', f
                         position: "top right"
                     }
                 );
-                $scope.showAlert = true;
                 $scope.cuenta.token = data.token;
                 LoginService.findTokensByUser(user.email).then(data => {
                     $scope.listaTokens = data || [];
@@ -152,10 +172,6 @@ myApp.controller('AccountsCtrl', ['$scope', 'LoginService', 'AccountsService', f
                 );
             }
         })
-    }
-
-    $scope.closeAlert = function() {
-        $scope.showAlert = false;
     }
 
     $scope.cancel = function () {

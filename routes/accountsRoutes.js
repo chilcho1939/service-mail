@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const checkAuth = require("../middleware/check-auth");
 const Account = require('../models/Account');
+const EmailTokens = require('../models/EmailTokens');
 const logger = require("../configs/log4js");
 
 router.post('/findAllByUser', checkAuth, function (req, res, next) {
@@ -21,6 +22,7 @@ router.post('/findAllByUser', checkAuth, function (req, res, next) {
                     ccMail: item.ccMail,
                     password: item.password,
                     deliveryMail: item.deliveryMail,
+                    tls: item.tls,
                     active: item.active
                 });
             });
@@ -66,8 +68,7 @@ router.post('/saveAccount', checkAuth, function (req, res, next) {
         registrationDate: new Date(),
         registrationUser: req.body.user,
         updateDate: new Date(),
-        updateUser: req.body.user,
-        active: true
+        updateUser: req.body.user
     });
     account.save().then(result => {
         res.status(201).json({

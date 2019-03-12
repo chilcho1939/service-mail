@@ -7,11 +7,12 @@ const accountSchema = mongoose.Schema({
     password: { type: String, required: true },
     deliveryMail: { type: String, required: true },
     ccMail: { type: String, required: false },
+    tls: {type: Boolean, required: true, default: false},
     registrationDate: { type: Date, required: true },
     registrationUser: { type: String, required: true },
     updateDate: { type: Date, required: true },
     updateUser: { type: String, required: true },
-    active: { type: Boolean, required: true}
+    active: { type: Boolean, required: true, default: false}
 });
 
 module.exports = mongoose.model("Account", accountSchema);

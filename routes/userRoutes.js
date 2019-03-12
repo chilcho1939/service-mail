@@ -10,7 +10,7 @@ const checkAuth = require("../middleware/check-auth");
 const logger = require('../configs/log4js');
 const sgMail = require('@sendgrid/mail');
 
-router.get('/userData/:userId', checkAuth, function (req, res, next) {
+router.get('/userData/:userId', checkAuth, function (req, res, _next) {
     if (!req.params.userId) {
         logger.error("Id de usuario requerido");
         return res.status(401).json({
@@ -37,7 +37,7 @@ router.get('/userData/:userId', checkAuth, function (req, res, next) {
     })
 });
 
-router.post('/iniciarSesion', function (req, res, next) {
+router.post('/iniciarSesion', function (req, res, _next) {
     let fetchedUser;
     User.find({ email: req.body.email }).then(user => {
         if (!user) {
@@ -77,7 +77,7 @@ router.post('/iniciarSesion', function (req, res, next) {
     });
 });
 
-router.post('/registrar', function (req, res, next) {
+router.post('/registrar', function (req, res, _next) {
     User.findOne({ email: req.body.email }).then(user => {
         if (user) {
             logger.error("Error al registrar usuario, ya existe cuenta");
@@ -97,7 +97,6 @@ router.post('/registrar', function (req, res, next) {
                 })
             });
             user.save().then(document => {
-                logger.info("usuario creado: " + JSON.stringify(document));
                 try {
                     logger.info("Enviando correo a: " + document.email);
                     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -113,7 +112,7 @@ router.post('/registrar', function (req, res, next) {
                     sgMail.send(msg);
                     logger.info("Correo envíado");
                     res.status(201).json({
-                        message: 'Usuario creado exitosamente, revisa tu correo para activar tu cuenta',
+                        message: 'Usuario creado exitosamente, revisa tu correo para activar tu cuenta o bien tu bandeja de SPAM',
                         code: 'ok'
                     });
                 } catch (e) {
@@ -134,7 +133,7 @@ router.post('/registrar', function (req, res, next) {
  *  Método que activa la cuenta del usuario nuevo
  *  @param token
  */
-router.put('/activateAccount/:token', function (req, res, next) {
+router.put('/activateAccount/:token', function (req, res, _next) {
     logger.info("Activando cuenta");
     User.findOne({ temporaryToken: req.params.token }, function (err, user) {
         if (err) {
@@ -145,7 +144,7 @@ router.put('/activateAccount/:token', function (req, res, next) {
             });
         }
         var token = req.params.token;
-        jwt.verify(token, constants.SECRET_WORD, function (err, decoded) {
+        jwt.verify(token, constants.SECRET_WORD, function (err, _decoded) {
             if (err) {
                 logger.error("Error: " + err);
                 return res.status(401).json({
@@ -174,6 +173,10 @@ router.put('/activateAccount/:token', function (req, res, next) {
                             html: `<p>Hola ${user.username}, has activado exitosamente tu cuenta.`
                         };
                         sgMail.send(msg);
+                        return res.status(200).json({
+                            message: "Cuenta activada",
+                            code: 'ok'
+                        })
                     })
                 } catch (e) {
                     logger.error(e);
@@ -183,12 +186,11 @@ router.put('/activateAccount/:token', function (req, res, next) {
                     });
                 }
             }
-            next()
-        })
+        });
     });
 });
 
-router.post('/generateToken', checkAuth, function (req, res, next) {
+router.post('/generateToken', checkAuth, function (req, res, _next) {
     if (!req.body.email) { 
         return res.status(401).json({
             message: "Error, correo requerido"
@@ -223,7 +225,7 @@ router.post('/generateToken', checkAuth, function (req, res, next) {
                 token: token, 
                 user: req.body.email
             });
-            userToken.save().then(doc => {
+            userToken.save().then(_doc => {
                 return res.status(200).json({
                     message: "Token generado exitosamente",
                     code: 'ok',
@@ -244,12 +246,19 @@ router.post('/generateToken', checkAuth, function (req, res, next) {
     })
 });
 
-router.get('/tokensByUser/:email', checkAuth, function(req, res, next) {
+router.get('/tokensByUser/:email', checkAuth, function (req, res, _next) {
+    if (!req.params.email || req.params.email == '') {
+        logger.error("Se requiere el correo electrónico");
+        return res.status(403).json({
+            message: "Usuario requerido"
+        });
+    }
     EmailTokens.find({user: req.params.email}).then(documents => {
         var arrTemp = [];
         documents.forEach((item) => {
             var temp = item.token[0].split('.');
             arrTemp.push({
+                id: item._id,
                 token: temp[0]
             });
         });
@@ -259,6 +268,24 @@ router.get('/tokensByUser/:email', checkAuth, function(req, res, next) {
             result: arrTemp
         })
     });
+});
+
+router.delete('/deleteToken/:id', checkAuth, function (req, res) {
+    if (!req.params.id || req.params.id == '') {
+        return res.status(403).json({
+            message: "Se requiere identificador"
+        });
+    }
+
+    EmailTokens.deleteOne({
+        _id: req.params.id
+    }).then(err => {
+        logger.info("Token eliminando exitosamente");
+        return res.status(200).json({
+            message: "El token se elimino existosamente",
+            code: 'ok'
+        });
+    })
 });
 
 module.exports = router;

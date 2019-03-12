@@ -62,7 +62,14 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3"></div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <span class="switch switch-sm">
+                                    <input type="checkbox" class="switch" id="switch-sm" ng-model="cuenta.tls">
+                                    <label for="switch-sm">TLS/SSL</label>
+                                </span>
+                            </div>
+                        </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <span class="switch switch-sm">
@@ -88,19 +95,15 @@
                         </div>
                     </div>
                 </form>
-                <div class="alert alert-warning alert-dismissible fade show" role="alert" ng-if="showAlert">
-                    <strong>Token generado exitosamente!</strong> Guarda este token, ya que por razones de seguridad no se volverá a mostrar
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="closeAlert()">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
                 <!-- Agregar nuevo registro-->
                 <div class="row" style="padding-top: 5%;">
-                    <div class="col-md-4"><h3>Cuentas de correo</h3></div>
-                    <div class="col-md-2"></div>
+                    <div class="col-md-5">
+                        <h3>Cuentas de correo</h3>
+                    </div>
+                    <div class="col-md-1"></div>
                     <div class="col-md-3"></div>
                     <div class="col-md-3 text-right" style="padding-bottom: 5px;">
-                        <button class="btn btn-success" ng-click="registro();"><span><i class="fa fa-plus-circle"
+                        <button class="btn btn-success" ng-click="registro();" ng-disabled="buttonNewDisabled"><span><i class="fa fa-plus-circle"
                                     aria-hidden="true"></i></span> Nuevo registro</button>
                     </div>
                 </div>
@@ -129,18 +132,20 @@
                             <td ng-if="!item.active"><span style="color:red;"><i class="fa fa-power-off" aria-hidden="true"></i></span></td>
                             <td><button ng-click="registro(item);"><span style="color:green;"><i class="fa fa-pencil-square-o"
                                             aria-hidden="true"></i></span></button></td>
-                            <td><button ng-click="showModal(item.id)"><span style="color:red;"><i class="fa fa-times"
+                            <td><button ng-click="showModal(item.id, true)"><span style="color:red;"><i class="fa fa-times"
                                             aria-hidden="true"></i></span></button></td>
                         </tr>
                     </tbody>
                 </table>
                 <div class="row" style="padding-top: 5%;">
-                    <div class="col-md-4"><h3>Tokens activos</h3></div>
+                    <div class="col-md-4">
+                        <h3>Tokens activos</h3>
+                    </div>
                     <div class="col-md-2"></div>
                     <div class="col-md-3"></div>
                     <div class="col-md-3 text-right" style="padding-bottom: 5px;">
-                        <button class="btn btn-success" ng-click="generateToken();" ng-disabled="buttonDisabled"><span><i class="fa fa-plus-circle"
-                                    aria-hidden="true"></i></span> Generar Token</button>
+                        <button class="btn btn-success" ng-click="generateToken();" ng-disabled="buttonDisabled"><span><i
+                                    class="fa fa-plus-circle" aria-hidden="true"></i></span> Generar Token</button>
                     </div>
                 </div>
                 <table class="table table-striped">
@@ -153,7 +158,7 @@
                     <tbody class="text-center">
                         <tr ng-repeat="item in listaTokens">
                             <td>{{item.token}}</td>
-                            <td>eliminar</td>
+                            <td><button ng-click="showModal(item.id, false)"><span style="color:red;"><i class="fa fa-times" aria-hidden="true"></i></span></button></td>
                         </tr>
                 </table>
             </div>

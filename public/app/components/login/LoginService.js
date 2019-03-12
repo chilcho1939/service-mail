@@ -74,6 +74,17 @@ myApp.factory('LoginService', ['$rootScope', 'Constants', 'Utils', '$log', '$win
             }).catch(err => {
                 $log.error("Error al obtener el listado");
             })
+        }, removeToken: function (id) { 
+            return Utils.ApiRequest({
+                url: $rootScope.app.context + Constants.ENDPOINT_REMOVE_TOKEN_BY_ID + id,
+                method: 'DELETE'
+            }).then(response => {
+                if (response.data.code == Constants.SUCCESS_RESPONSE_CODE) {
+                    return response.data;
+                }
+            }).catch(err => { 
+                $log.error("Error al eliminar el registro: " + err);
+            });
         }
     };
     return loginOperations;

@@ -9,6 +9,7 @@ myApp.constant('Constants', {
     ENDPOINT_ACTIVATE_ACCOUNT: "/login/activateAccount/",
     ENDPOINT_GENERATE_EMAIL_TOKEN: "/login/generateToken",
     ENDPOINT_GET_TOKENS_BY_USER: "/login/tokensByUser/",
+    ENDPOINT_REMOVE_TOKEN_BY_ID: "/login/deleteToken/",
     /*ACCOUNT ENDPOINTS */
     ENDPOINT_FINDALL_ACCOUNTS_BY_USER: "/accounts/findAllByUser",
     ENDPOINT_EDIT_ACCOUNT: "/accounts/updateAccount",
