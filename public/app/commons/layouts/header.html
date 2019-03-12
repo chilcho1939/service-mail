@@ -1,9 +1,11 @@
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
     <div class="container">
-        <a class="navbar-brand logo-font" href="#">
-            Servicio de correos
-        </a>
+        <li ui-sref="/" class="element-li">
+            <a class="navbar-brand logo-font">
+                Servicio de correos
+            </a>
+        </li>
 
         <!-- links toggle -->
         <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#links" aria-controls="navbarResponsive"
@@ -18,10 +20,10 @@
 
         <div class="collapse navbar-collapse" id="links">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Inicio</a>
+                <li class="nav-item element-li active" ui-sref="/">
+                    <a class="nav-link">Inicio</a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link" href="#">Acerca de nosotros</a>
                 </li>
                 <li class="nav-item">
@@ -37,7 +39,7 @@
                         <a class="dropdown-item" href="#">Dropdown 2</a>
                         <a class="dropdown-item" href="#">Dropdown 3</a>
                     </div>
-                </li>
+                </li> -->
             </ul>
         </div>
 
@@ -47,8 +49,8 @@
                 <li ui-sref="login" class="nav-item pointer"><a class="nav-link" ng-click="changeView(true);">Iniciar
                         sesión</a></li>
             </ul>
-            <li class="nav-item dropdown" ng-if="isAuthenticated">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+            <li class="nav-item dropdown element-li" ng-if="isAuthenticated">
+                <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">
                     <span style="color:white;">{{userLogged.username}}</span>
                 </a>

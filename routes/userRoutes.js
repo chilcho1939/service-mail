@@ -1,6 +1,7 @@
 const express = require('express');
 const constants = require('../commons/Constants');
 const User = require("../models/User");
+const Account = require('../models/Account');
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -36,7 +37,6 @@ router.get('/userData/:userId', checkAuth, function (req, res, next) {
 });
 
 router.post('/iniciarSesion', function (req, res, next) {
-    logger.info("Data: " + JSON.stringify(req.body));
     let fetchedUser;
     User.find({ email: req.body.email }).then(user => {
         if (!user) {
@@ -64,7 +64,8 @@ router.post('/iniciarSesion', function (req, res, next) {
             code: 'ok',
             token: token,
             expiresIn: 3600,
-            userId: fetchedUser[0]._id
+            userId: fetchedUser[0]._id,
+            username: fetchedUser[0].username
         });
     }).catch(err => {
         logger.error(err);
@@ -92,7 +93,7 @@ router.post('/registrar', function (req, res, next) {
                     email: req.body.email
                 }, constants.SECRET_WORD, {
                         expiresIn: "1h"
-                    })
+                })
             });
             user.save().then(document => {
                 logger.info("usuario creado: " + JSON.stringify(document));
@@ -104,7 +105,7 @@ router.post('/registrar', function (req, res, next) {
                         from: 'chilcho1939@gmail.com',
                         subject: 'Gracias por unirte a nuestra red',
                         text: 'Bienvenido',
-                        html: `<p>Hola ${user.username}, bienvenido al servicio de correos de Gildardo Ortiz.</p>`
+                        html: `<p>Hola ${user.username}, bienvenido al servicio de correos para tu sitio web.</p>`
                             + '<p>Donde podrás integrar la funcionalidad de envío de correos a tu sitio web <strong>sin costo.</strong ></p>'
                             + '<p>Para activar tu cuenta, por favor da click en la siguiente dirección: <a href="http://localhost:8999/#!/activate/' + user.temporaryToken + '">Activar cuenta</a></p>'
                     };
@@ -184,6 +185,67 @@ router.put('/activateAccount/:token', function (req, res, next) {
             next()
         })
     });
-})
+});
+
+router.post('/generateToken', checkAuth, function (req, res, next) {
+    if (!req.body.email || !req.body.password) { 
+        return res.status(401).json({
+            message: "Error, correo y contraseña requeridos"
+        });
+    }
+
+    Account.findOne({
+        registrationUser: req.body.email,
+        active: true
+    }).then(account => { 
+        if (!account) { 
+            logger.error("Sin resultados para el usuario, favor de revisar");
+            return res.status(404).json({
+                message: "Sin resultados para el usuario, favor de validar"
+            });
+        }
+        User.find({
+            email: req.body.email
+        }).then(user => {
+            if (!user) { 
+                logger.error("El usuario no existe");
+                return res.status(404).json({
+                    message: "El usuario no existe"
+                });
+            }
+            //codificar el correo y el id de la cuenta, generamos token valido por un año
+            user.emailToken = jwt.sign({
+                email: req.body.email,
+                idAccount: account._id
+            }, constants.SECRET_WORD_TOKEN_GENERATION, {
+                expiresIn: '365d'
+            });
+
+            user.save().then(document => { 
+                res.status(200).json({
+                    message: "Token generado exitosamente",
+                    code: 'ok',
+                    result: token
+                });
+            }).catch(err => { 
+                logger.error("Error al guardar información del usuario: " + err);
+                return res.status(500).json({
+                    message: "Erro al guardar información del usuario"
+                });
+            })
+
+        }).catch(err => {
+            logger.error("Error buscando el usuario:" + err);
+            return res.status(500).json({
+                message: "Error buscando el usuario"
+            });
+        });
+    }).catch(err => {
+        logger.error("Error generando token: " + err);
+        return res.status(404).json({
+            message: "Error generando token: " + err
+        });
+    })
+});
 
 module.exports = router;

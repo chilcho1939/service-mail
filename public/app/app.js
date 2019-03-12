@@ -1,1 +1,1 @@
-var myApp = angular.module('myApp', ['ui.router', 'ngMaterial', 'ngMessages']);
+var myApp = angular.module('myApp', ['ui.router', 'ngMaterial', 'ngMessages', 'ngAnimate']);

@@ -9,11 +9,11 @@ myApp.controller('MasterCtrl', ['$scope', '$rootScope', '$window', 'LoginService
         LoginService.logout();
     }
 
-    $rootScope.$on('userData', function (event, data) { 
+    $rootScope.$on('userData', function (event, data) {
         event.preventDefault();
-        if (data) { 
+        if (data) {
             $scope.userLogged = data;
             $rootScope.isAuthenticated = LoginService.isLoggedIn();
         }
-    })
+    });
 }]);

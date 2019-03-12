@@ -46,3 +46,20 @@
     top: 64;
     left: 0;
 }
+
+.paginaNoEncontrada {
+    text-align: center;
+}
+
+.paginaNoEncontrada {
+    color: #BBBBBB;
+}
+
+.paginaNoEncontrada img {
+    width: 400px;
+}
+
+.element-li {
+    color:white;
+    cursor: pointer;
+}

@@ -1,19 +1,14 @@
-var express = require("express");
-var logger = require("morgan");
-var path = require("path");
-var bodyParser = require("body-parser");
-var cookierParser = require("cookie-parser");
-var mongoose = require("mongoose");
-var app = express();
+const express = require("express");
+const logger = require("morgan");
+const path = require("path");
+const bodyParser = require("body-parser");
+const cookierParser = require("cookie-parser");
+const app = express();
+const constants = require('./commons/Constants');
+const mongoConnection = require('./configs/database-connection');
 
 /* Database connection */
-mongoose.connect('mongodb+srv://maildevelop:maildevelop@clustermailservice-ofo7q.gcp.mongodb.net/mailServices', {
-    useNewUrlParser: true
-}).then(() => {
-    console.log("Conectado a la base de datos");
-}).catch((error) => {
-    console.log("Error conectando a la base de datos: " + error);
-});
+mongoConnection(constants.MONGO_STRING_CONNECTION);
 
 //Api routes
 var mailServer = require('./routes/mailRoutes');

@@ -8,7 +8,7 @@ myApp.factory('LoginService', ['$rootScope', 'Constants', 'Utils', '$log', '$win
                 data: user
             }).then(response => {
                 if (response.data.code == Constants.SUCCESS_RESPONSE_CODE) {
-                    saveAuthData(response.data.token, new Date(new Date().getTime() + (response.data.expiresIn * 1000)), response.data.userId)
+                    saveAuthData(response.data.token, new Date(new Date().getTime() + (response.data.expiresIn * 1000)), response.data.userId, response.data.username)
                     return this.getUserInformation(response.data.userId);
                 }
             }).catch(error => {
@@ -79,6 +79,7 @@ myApp.factory('LoginService', ['$rootScope', 'Constants', 'Utils', '$log', '$win
         delete $window.localStorage.isAuthenticated;
         delete $window.localStorage.userId;
         delete $window.localStorage.email;
+        delete $window.localStorage.username;
         $rootScope.isAuthenticated = false;
     }
 
@@ -87,6 +88,7 @@ myApp.factory('LoginService', ['$rootScope', 'Constants', 'Utils', '$log', '$win
         var expirationDate = $window.localStorage.expirationDate;
         var userId = $window.localStorage.userId;
         var email = $window.localStorage.email;
+        var username = $window.localStorage.username;
         if (!token ||  !expirationDate || !userId) {
             return;
         }
@@ -94,13 +96,15 @@ myApp.factory('LoginService', ['$rootScope', 'Constants', 'Utils', '$log', '$win
             token: token,
             expirationDate: new Date(expirationDate),
             userId: userId,
-            email : email
+            email: email,
+            username : username
         };
     }
 
-    function saveAuthData(token, expirationDate, userId) {
+    function saveAuthData(token, expirationDate, userId, username) {
         $window.localStorage.token = token;
         $window.localStorage.expirationDate = expirationDate;
         $window.localStorage.userId = userId;
+        $window.localStorage.username = username;
     }
 }]);
