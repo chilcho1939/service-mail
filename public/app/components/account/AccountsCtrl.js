@@ -2,17 +2,23 @@ myApp.controller('AccountsCtrl', ['$scope', 'LoginService', 'AccountsService', f
     $scope.lista = [];
     $scope.cuenta = {};
     $scope.showForm = false;
-    var edit = false;
-    var user = {};
     $scope.idToDelete;
+    $scope.showAlert = false;
+    $scope.listaTokens = [];
+
+    var edit = false;
+    var user = LoginService.isLoggedIn();
 
     (function () {
-        user = LoginService.isLoggedIn();
         $("#loading-data").css("display", "block");
         if (user) {
             AccountsService.findAllByUser(user.email).then(data => {
                 $scope.lista = data || [];
                 $("#loading-data").css("display", "none");
+            });
+            LoginService.findTokensByUser(user.email).then(data => {
+                $scope.listaTokens = data || [];
+                $scope.buttonDisabled = $scope.listaTokens.length > 0 ? true : false;
             });
         } else {
             $.notify('No se ha iniciado sesión',
@@ -122,6 +128,34 @@ myApp.controller('AccountsCtrl', ['$scope', 'LoginService', 'AccountsService', f
 
     $scope.closeModal = function () {
         $('#deleteAccountModal').modal('hide');
+    }
+
+    $scope.generateToken = function () {
+        LoginService.generateEmailTkn(user.email).then(data => {
+            if (data) {
+                $.notify(data.message,
+                    'success', {
+                        position: "top right"
+                    }
+                );
+                $scope.showAlert = true;
+                $scope.cuenta.token = data.token;
+                LoginService.findTokensByUser(user.email).then(data => {
+                    $scope.listaTokens = data || [];
+                    $scope.buttonDisabled = $scope.listaTokens.length > 0 ? true : false;
+                });
+            } else {
+                $.notify('Error al generar token, contactar al administrador',
+                    'error', {
+                        position: "top right"
+                    }
+                );
+            }
+        })
+    }
+
+    $scope.closeAlert = function() {
+        $scope.showAlert = false;
     }
 
     $scope.cancel = function () {

@@ -2,6 +2,7 @@ const express = require('express');
 const constants = require('../commons/Constants');
 const User = require("../models/User");
 const Account = require('../models/Account');
+const EmailTokens = require('../models/EmailTokens');
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -188,57 +189,52 @@ router.put('/activateAccount/:token', function (req, res, next) {
 });
 
 router.post('/generateToken', checkAuth, function (req, res, next) {
-    if (!req.body.email || !req.body.password) { 
+    if (!req.body.email) { 
         return res.status(401).json({
-            message: "Error, correo y contraseña requeridos"
+            message: "Error, correo requerido"
         });
     }
 
     Account.findOne({
         registrationUser: req.body.email,
         active: true
-    }).then(account => { 
+    }).then(account => {
         if (!account) { 
             logger.error("Sin resultados para el usuario, favor de revisar");
             return res.status(404).json({
                 message: "Sin resultados para el usuario, favor de validar"
             });
         }
-        User.find({
-            email: req.body.email
-        }).then(user => {
-            if (!user) { 
-                logger.error("El usuario no existe");
-                return res.status(404).json({
-                    message: "El usuario no existe"
+        //codificar el correo y el id de la cuenta, generamos token valido por un año
+        var token = jwt.sign({
+            email: req.body.email,
+            idAccount: account._id
+        }, constants.SECRET_WORD_TOKEN_GENERATION, {
+            expiresIn: '365d'
+        });
+        EmailTokens.find({email: req.params.email}).then(documents => {
+            if(documents.length > 0) {
+                return res.status(200).json({
+                    message: "El usuario ya ha generado un token",
+                    code: 'ok'
                 });
             }
-            //codificar el correo y el id de la cuenta, generamos token valido por un año
-            user.emailToken = jwt.sign({
-                email: req.body.email,
-                idAccount: account._id
-            }, constants.SECRET_WORD_TOKEN_GENERATION, {
-                expiresIn: '365d'
+            const userToken = new EmailTokens({
+                token: token, 
+                user: req.body.email
             });
-
-            user.save().then(document => { 
-                res.status(200).json({
+            userToken.save().then(doc => {
+                return res.status(200).json({
                     message: "Token generado exitosamente",
                     code: 'ok',
                     result: token
-                });
-            }).catch(err => { 
-                logger.error("Error al guardar información del usuario: " + err);
-                return res.status(500).json({
-                    message: "Erro al guardar información del usuario"
+                });  
+            }).catch(err => {
+                logger.error("Error al crear nuevo registro de token: "+ err);
+                return res.status(501).json({
+                    message: "Error registrando nuevo token"
                 });
             })
-
-        }).catch(err => {
-            logger.error("Error buscando el usuario:" + err);
-            return res.status(500).json({
-                message: "Error buscando el usuario"
-            });
         });
     }).catch(err => {
         logger.error("Error generando token: " + err);
@@ -246,6 +242,23 @@ router.post('/generateToken', checkAuth, function (req, res, next) {
             message: "Error generando token: " + err
         });
     })
+});
+
+router.get('/tokensByUser/:email', checkAuth, function(req, res, next) {
+    EmailTokens.find({user: req.params.email}).then(documents => {
+        var arrTemp = [];
+        documents.forEach((item) => {
+            var temp = item.token[0].split('.');
+            arrTemp.push({
+                token: temp[0]
+            });
+        });
+        res.status(200).json({
+            message: "Registros obtenidos exitosamente",
+            code: 'ok',
+            result: arrTemp
+        })
+    });
 });
 
 module.exports = router;

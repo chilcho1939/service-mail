@@ -43,11 +43,37 @@ myApp.factory('LoginService', ['$rootScope', 'Constants', 'Utils', '$log', '$win
             }).catch(error => { 
                 $log.error('Error al obtener la información del usuario solicitado: ' + error);
             })
-        },
+        }, 
         logout: function() {
             clearTimeout(timer);
             clearAuthData();
             $state.go('login');
+        }, 
+        generateEmailTkn: function(email) {
+            return Utils.ApiRequest({
+                url: $rootScope.app.context + Constants.ENDPOINT_GENERATE_EMAIL_TOKEN,
+                method: 'POST',
+                data: {
+                    email: email
+                }
+            }).then(response => {
+                if(response.data.code == Constants.SUCCESS_RESPONSE_CODE) {
+                    return response.data;
+                }
+            }).catch(err => {
+                $log.error("Error al generar el token: " + err);
+            });
+        }, findTokensByUser: function(email){
+            return Utils.ApiRequest({
+                url: $rootScope.app.context + Constants.ENDPOINT_GET_TOKENS_BY_USER + email,
+                method: 'GET'
+            }).then(response => {
+                if(response.data.code == Constants.SUCCESS_RESPONSE_CODE) {
+                    return response.data.result;
+                }
+            }).catch(err => {
+                $log.error("Error al obtener el listado");
+            })
         }
     };
     return loginOperations;

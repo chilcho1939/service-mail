@@ -20,6 +20,7 @@ router.post('/sendMail', (req, res) => {
             message: "Error, correo electrónico requerido"
         });
     }
+    //quitar el token y obtenerlo del usuario
     if (!req.body.token) { 
         logger.error("Se necesita token para continuar");
         return res.status(401).json({
