@@ -5,4 +5,4 @@
 /public/js/
 npm-debug.log
 /configs/logs/
-/configs/*.env
+configs/dev.env
