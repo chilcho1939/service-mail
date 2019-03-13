@@ -58,7 +58,7 @@ router.post('/iniciarSesion', function (req, res, _next) {
         const token = jwt.sign({
             email: fetchedUser.email,
             userId: fetchedUser._id
-        }, constants.SECRET_WORD, {
+        }, process.env.SECRET_WORD, {
                 expiresIn: "1h"
             });
         res.status(200).json({
@@ -92,7 +92,7 @@ router.post('/registrar', function (req, res, _next) {
                 password: hash,
                 temporaryToken: jwt.sign({
                     email: req.body.email
-                }, constants.SECRET_WORD, {
+                }, process.env.SECRET_WORD, {
                         expiresIn: "1h"
                 })
             });
@@ -144,7 +144,7 @@ router.put('/activateAccount/:token', function (req, res, _next) {
             });
         }
         var token = req.params.token;
-        jwt.verify(token, constants.SECRET_WORD, function (err, _decoded) {
+        jwt.verify(token, process.env.SECRET_WORD, function (err, _decoded) {
             if (err) {
                 logger.error("Error: " + err);
                 return res.status(401).json({
@@ -211,7 +211,7 @@ router.post('/generateToken', checkAuth, function (req, res, _next) {
         var token = jwt.sign({
             email: req.body.email,
             idAccount: account._id
-        }, constants.SECRET_WORD_TOKEN_GENERATION, {
+        }, process.env.SECRET_WORD_TOKEN_GENERATION, {
             expiresIn: '365d'
         });
         EmailTokens.find({email: req.params.email}).then(documents => {

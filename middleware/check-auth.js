@@ -8,7 +8,7 @@ module.exports = (req, res, next) => {
             throw "No se encontró token, error!"
         }
         const token = req.headers.authorization.split(" ")[1];
-        const decodedToken = jwt.verify(token, constants.SECRET_WORD);
+        const decodedToken = jwt.verify(token, process.env.SECRET_WORD);
         req.userData = {
             email: decodedToken.email,
             userId: decodedToken.userId

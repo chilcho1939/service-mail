@@ -53,7 +53,7 @@ router.post('/sendMail', (req, res) => {
             const token = emailToken.token[0];
             var decodedToken;
             try {
-                decodedToken = jwt.verify(token, constants.SECRET_WORD_TOKEN_GENERATION);
+                decodedToken = jwt.verify(token, process.env.SECRET_WORD_TOKEN_GENERATION);
             } catch (e) {
                 logger.error("Error decodificando el token: " + e);
             }

@@ -8,7 +8,7 @@ const constants = require('./commons/Constants');
 const mongoConnection = require('./configs/database-connection');
 
 /* Database connection */
-mongoConnection(constants.MONGO_STRING_CONNECTION);
+mongoConnection(process.env.MONGO_STRING_CONNECTION);
 
 //Api routes
 var mailServer = require('./routes/mailRoutes');

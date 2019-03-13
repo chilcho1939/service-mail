@@ -6,8 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server/server.js",
-    "dev": "env-cmd ./configs/dev.env nodemon server/server.js",
-    "prod": "env-cmd ./configs/prod.env nodemon server/server.js"
+    "dev": "env-cmd ./configs/dev.env nodemon server/server.js"
   },
   "repository": {
     "type": "git",
