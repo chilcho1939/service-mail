@@ -41,6 +41,7 @@ router.post('/iniciarSesion', function (req, res, _next) {
     let fetchedUser;
     console.log(JSON.stringify(req.body))
     User.find({ email: req.body.email }).then(user => {
+        console.log(JSON.stringify(user))
         if (!user) {
             logger.error("No se encontró el usuario");
             return res.status(401).json({
