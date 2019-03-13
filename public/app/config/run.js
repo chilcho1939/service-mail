@@ -1,7 +1,7 @@
 myApp.run(['$rootScope', '$location', '$state', 'LoginService', '$transitions','$state', function ($rootScope, $location, $state, LoginService, $transitions, $state) {
     $rootScope.app = {
-        context: 'https://send-mail-service.herokuapp.com/api'
-        , baseUrl: 'https://send-mail-service.herokuapp.com/#!'
+        context: 'http://localhost:8999/api'
+        , baseUrl: 'http://localhost:8999/#!'
     };
     /**
      * Add the routes with or || in the boolean method

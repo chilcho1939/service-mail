@@ -6,7 +6,6 @@ const User = require('../models/User');
 const Account = require('../models/Account');
 const EmailTokens = require('../models/EmailTokens');
 const jwt = require('jsonwebtoken');
-const constants = require('../commons/Constants');
 
 router.get('/saludar', (req, res) => {
     res.status(200).json({

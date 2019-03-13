@@ -1,5 +1,4 @@
 const express = require('express');
-const constants = require('../commons/Constants');
 const User = require("../models/User");
 const Account = require('../models/Account');
 const EmailTokens = require('../models/EmailTokens');
@@ -8,7 +7,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const checkAuth = require("../middleware/check-auth");
 const logger = require('../configs/log4js');
-const sgMail = require('@sendgrid/mail');
+// const mail = require('../configs/own-mail-service');
 
 router.get('/userData/:userId', checkAuth, function (req, res, _next) {
     if (!req.params.userId) {
@@ -40,7 +39,7 @@ router.get('/userData/:userId', checkAuth, function (req, res, _next) {
 router.post('/iniciarSesion', function (req, res, _next) {
     let fetchedUser;
     console.log(JSON.stringify(req.body))
-    User.find({ email: req.body.email }).then(user => {
+    User.findOne({ email: req.body.email }).then(user => {
         console.log(JSON.stringify(user))
         if (!user) {
             logger.error("No se encontró el usuario");
@@ -51,7 +50,7 @@ router.post('/iniciarSesion', function (req, res, _next) {
         console.log(JSON.stringify("------" + req.body))
         fetchedUser = user;
         console.log(fetchedUser)
-        return bcrypt.compare(req.body.password, user[0].password);
+        return bcrypt.compare(req.body.password, user.password);
     }).then(result => {
         if (!result) {
             logger.error("Contraseña no válida");
@@ -69,8 +68,8 @@ router.post('/iniciarSesion', function (req, res, _next) {
             code: 'ok',
             token: token,
             expiresIn: 3600,
-            userId: fetchedUser[0]._id,
-            username: fetchedUser[0].username
+            userId: fetchedUser._id,
+            username: fetchedUser.username
         });
     }).catch(err => {
         logger.error(err);
@@ -103,17 +102,18 @@ router.post('/registrar', function (req, res, _next) {
             user.save().then(document => {
                 try {
                     logger.info("Enviando correo a: " + document.email);
-                    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-                    const msg = {
-                        to: req.body.email,
-                        from: 'chilcho1939@gmail.com',
-                        subject: 'Gracias por unirte a nuestra red',
-                        text: 'Bienvenido',
-                        html: `<p>Hola ${user.username}, bienvenido al servicio de correos para tu sitio web.</p>`
-                            + '<p>Donde podrás integrar la funcionalidad de envío de correos a tu sitio web <strong>sin costo.</strong ></p>'
-                            + '<p>Para activar tu cuenta, por favor da click en la siguiente dirección: <a href="' + process.env.BASE_URL+ ':' + process.env.PORT + '/#!/activate/' + user.temporaryToken + '">Activar cuenta</a></p>'
-                    };
-                    sgMail.send(msg);
+                    mail()
+                    
+                    // const msg = {
+                    //     to: req.body.email,
+                    //     from: 'chilcho1939@gmail.com',
+                    //     subject: 'Gracias por unirte a nuestra red',
+                    //     text: 'Bienvenido',
+                    //     html: `<p>Hola ${user.username}, bienvenido al servicio de correos para tu sitio web.</p>`
+                    //         + '<p>Donde podrás integrar la funcionalidad de envío de correos a tu sitio web <strong>sin costo.</strong ></p>'
+                    //         + '<p>Para activar tu cuenta, por favor da click en la siguiente dirección: <a href="' + process.env.BASE_URL+ ':' + process.env.PORT + '/#!/activate/' + user.temporaryToken + '">Activar cuenta</a></p>'
+                    // };
+                    // sgMail.send(msg);
                     logger.info("Correo envíado");
                     res.status(201).json({
                         message: 'Usuario creado exitosamente, revisa tu correo para activar tu cuenta o bien tu bandeja de SPAM',
