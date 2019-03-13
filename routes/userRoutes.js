@@ -39,6 +39,7 @@ router.get('/userData/:userId', checkAuth, function (req, res, _next) {
 
 router.post('/iniciarSesion', function (req, res, _next) {
     let fetchedUser;
+    console.log(JSON.stringify(req.body))
     User.find({ email: req.body.email }).then(user => {
         if (!user) {
             logger.error("No se encontró el usuario");
