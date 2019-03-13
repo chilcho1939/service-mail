@@ -48,6 +48,7 @@ router.post('/iniciarSesion', function (req, res, _next) {
                 message: "No se encontró el usuario"
             });
         }
+        console.log(JSON.stringify("------" + req.body))
         fetchedUser = user;
         console.log(fetchedUser)
         return bcrypt.compare(req.body.password, user[0].password);
