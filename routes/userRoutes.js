@@ -7,7 +7,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const checkAuth = require("../middleware/check-auth");
 const logger = require('../configs/log4js');
-// const mail = require('../configs/own-mail-service');
+const sgMail = require('@sendgrid/mail');
 
 router.get('/userData/:userId', checkAuth, function (req, res, _next) {
     if (!req.params.userId) {
@@ -38,14 +38,18 @@ router.get('/userData/:userId', checkAuth, function (req, res, _next) {
 
 router.post('/iniciarSesion', function (req, res, _next) {
     let fetchedUser;
+    console.log(JSON.stringify(req.body))
     User.findOne({ email: req.body.email }).then(user => {
+        console.log(JSON.stringify(user))
         if (!user) {
             logger.error("No se encontró el usuario");
             return res.status(401).json({
                 message: "No se encontró el usuario"
             });
         }
+        console.log(JSON.stringify("------" + req.body))
         fetchedUser = user;
+        console.log(fetchedUser)
         return bcrypt.compare(req.body.password, user.password);
     }).then(result => {
         if (!result) {
@@ -98,18 +102,17 @@ router.post('/registrar', function (req, res, _next) {
             user.save().then(document => {
                 try {
                     logger.info("Enviando correo a: " + document.email);
-                    mail()
-                    
-                    // const msg = {
-                    //     to: req.body.email,
-                    //     from: 'chilcho1939@gmail.com',
-                    //     subject: 'Gracias por unirte a nuestra red',
-                    //     text: 'Bienvenido',
-                    //     html: `<p>Hola ${user.username}, bienvenido al servicio de correos para tu sitio web.</p>`
-                    //         + '<p>Donde podrás integrar la funcionalidad de envío de correos a tu sitio web <strong>sin costo.</strong ></p>'
-                    //         + '<p>Para activar tu cuenta, por favor da click en la siguiente dirección: <a href="' + process.env.BASE_URL+ ':' + process.env.PORT + '/#!/activate/' + user.temporaryToken + '">Activar cuenta</a></p>'
-                    // };
-                    // sgMail.send(msg);
+                    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+                    const msg = {
+                        to: req.body.email,
+                        from: 'chilcho1939@gmail.com',
+                        subject: 'Gracias por unirte a nuestra red',
+                        text: 'Bienvenido',
+                        html: `<p>Hola ${user.username}, bienvenido al servicio de correos para tu sitio web.</p>`
+                            + '<p>Donde podrás integrar la funcionalidad de envío de correos a tu sitio web <strong>sin costo.</strong ></p>'
+                            + '<p>Para activar tu cuenta, por favor da click en la siguiente dirección: <a href="' + process.env.BASE_URL+ ':' + process.env.PORT + '/#!/activate/' + user.temporaryToken + '">Activar cuenta</a></p>'
+                    };
+                    sgMail.send(msg);
                     logger.info("Correo envíado");
                     res.status(201).json({
                         message: 'Usuario creado exitosamente, revisa tu correo para activar tu cuenta o bien tu bandeja de SPAM',
