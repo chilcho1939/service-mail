@@ -38,18 +38,14 @@ router.get('/userData/:userId', checkAuth, function (req, res, _next) {
 
 router.post('/iniciarSesion', function (req, res, _next) {
     let fetchedUser;
-    console.log(JSON.stringify(req.body))
     User.findOne({ email: req.body.email }).then(user => {
-        console.log(JSON.stringify(user))
         if (!user) {
             logger.error("No se encontró el usuario");
             return res.status(401).json({
                 message: "No se encontró el usuario"
             });
         }
-        console.log(JSON.stringify("------" + req.body))
         fetchedUser = user;
-        console.log(fetchedUser)
         return bcrypt.compare(req.body.password, user.password);
     }).then(result => {
         if (!result) {
