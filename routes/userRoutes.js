@@ -47,6 +47,7 @@ router.post('/iniciarSesion', function (req, res, _next) {
             });
         }
         fetchedUser = user;
+        console.log(fetchedUser)
         return bcrypt.compare(req.body.password, user[0].password);
     }).then(result => {
         if (!result) {
