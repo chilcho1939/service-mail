@@ -1,0 +1,168 @@
+<div class="container">
+    <div class="limiter">
+        <div class="container-login100">
+            <div class="wrap-generic">
+                <div id="loading-data" class="overlay">
+                    <div layout="row" layout-align="center center" layout-padding>
+                        <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
+                        <h4 class="text-center">Cargando...</h4>
+                    </div>
+                </div>
+                <h1 class="text-center" style="padding-bottom: 5%;">Mi cuenta de correo</h1>
+                <form class="accountsForm" id="accountsForm" name="accountsForm" ng-if="showForm">
+                    <div class="row">
+                        <div class="col-md-3 labels-account">
+                            <label><span style="color:red;">*</span>Host:</label>
+                        </div>
+                        <div class="col-md-3 text-box-account">
+                            <input type="text" id="host" class="form-control" ng-model="cuenta.host" placeholder="10.0.1.1 ó smtp.mail.com"
+                                required />
+                        </div>
+                        <div class="col-md-3 labels-account">
+                            <label><span style="color:red;">*</span>Puerto:</label>
+                        </div>
+                        <div class="col-md-3 text-box-account">
+                            <input type="text" id="port" class="form-control" ng-model="cuenta.port" placeholder="9012"
+                                required />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 labels-account">
+                            <label><span style="color:red;">*</span>Correo origen:</label>
+                        </div>
+                        <div class="col-md-3 text-box-account">
+                            <input type="text" id="sourceMail" class="form-control" ng-model="cuenta.sourceMail"
+                                ng-change="validateMail('from')" placeholder="somebody@gmail.com" required />
+                            <div id="resultFrom"></div>
+                        </div>
+                        <div class="col-md-3 labels-account">
+                            <label><span style="color:red;">*</span>Contraseña:</label>
+                        </div>
+                        <div class="col-md-3 text-box-account">
+                            <input type="password" id="passwordAccount" class="form-control" ng-model="cuenta.password"
+                                required />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 labels-account">
+                            <label><span style="color:red;">*</span>Correo destino (default):</label>
+                        </div>
+                        <div class="col-md-3 text-box-account">
+                            <input type="text" id="deliveryMail" class="form-control" ng-model="cuenta.deliveryMail"
+                                ng-change="validateMail('to')" placeholder="somebody@gmail.com" required />
+                            <div id="result"></div>
+                        </div>
+                        <div class="col-md-3 labels-account">
+                            <label>CC:</label>
+                        </div>
+                        <div class="col-md-3 text-box-account">
+                            <input type="text" id="ccAccount" class="form-control" ng-model="cuenta.ccMail" ng-change="validateMail('cc')"
+                                placeholder="somebody@gmail.com" />
+                            <div id="resultCC"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <span class="switch switch-sm">
+                                    <input type="checkbox" class="switch" id="switch-sm" ng-model="cuenta.tls">
+                                    <label for="switch-sm">TLS/SSL</label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <span class="switch switch-sm">
+                                    <input type="checkbox" class="switch" id="switch-sm" ng-model="cuenta.active">
+                                    <label for="switch-sm">Cuenta activa</label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-3 text-right">
+                            <button class="btn btn-danger" ng-click="cancel();"><i class="fa fa-times" aria-hidden="true"></i>
+                                Cancelar</button>
+                        </div>
+                        <div class="col-md-2 text-right">
+                            <button class="btn btn-primary" ng-click="guardar()"><i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                Guardar</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-9"></div>
+                        <div class="col-md-3 text-right">
+                            <small id="formHelp" class="form-text text-muted"><span style="color:red;">*</span> Campos
+                                obligatorios</small>
+                        </div>
+                    </div>
+                </form>
+                <!-- Agregar nuevo registro-->
+                <div class="row" style="padding-top: 5%;">
+                    <div class="col-md-5">
+                        <h3>Cuentas de correo</h3>
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3 text-right" style="padding-bottom: 5px;">
+                        <button class="btn btn-success" ng-click="registro();" ng-disabled="buttonNewDisabled"><span><i class="fa fa-plus-circle"
+                                    aria-hidden="true"></i></span> Nuevo registro</button>
+                    </div>
+                </div>
+                <!-- Tabla de cuentas activas-->
+                <table class="table table-striped">
+                    <thead class="text-center">
+                        <tr>
+                            <th scope="col">Host</th>
+                            <th scope="col">Puerto</th>
+                            <th scope="col">Cuenta origen</th>
+                            <th scope="col">Cuenta destino</th>
+                            <th scope="col">Cuenta CC</th>
+                            <th scope="col">Activo</th>
+                            <th scope="col">Editar</th>
+                            <th scope="col">Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center">
+                        <tr ng-repeat="item in lista">
+                            <td>{{item.host}}</td>
+                            <td>{{item.port}}</td>
+                            <td>{{item.sourceMail}}</td>
+                            <td>{{item.deliveryMail}}</td>
+                            <td>{{item.ccMail}}</td>
+                            <td ng-if="item.active"><span style="color:green;"><i class="fa fa-power-off" aria-hidden="true"></i></span></td>
+                            <td ng-if="!item.active"><span style="color:red;"><i class="fa fa-power-off" aria-hidden="true"></i></span></td>
+                            <td><button ng-click="registro(item);"><span style="color:green;"><i class="fa fa-pencil-square-o"
+                                            aria-hidden="true"></i></span></button></td>
+                            <td><button ng-click="showModal(item.id, true)"><span style="color:red;"><i class="fa fa-times"
+                                            aria-hidden="true"></i></span></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="row" style="padding-top: 5%;">
+                    <div class="col-md-4">
+                        <h3>Tokens activos</h3>
+                    </div>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3 text-right" style="padding-bottom: 5px;">
+                        <button class="btn btn-success" ng-click="generateToken();" ng-disabled="buttonDisabled"><span><i
+                                    class="fa fa-plus-circle" aria-hidden="true"></i></span> Generar Token</button>
+                    </div>
+                </div>
+                <table class="table table-striped">
+                    <thead class="text-center">
+                        <tr>
+                            <th scope="col">Token</th>
+                            <th scope="col">Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center">
+                        <tr ng-repeat="item in listaTokens">
+                            <td>{{item.token}}</td>
+                            <td><button ng-click="showModal(item.id, false)"><span style="color:red;"><i class="fa fa-times" aria-hidden="true"></i></span></button></td>
+                        </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div ng-include='"app/commons/modals/DeleteAccountModal.html"'></div>

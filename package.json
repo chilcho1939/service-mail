@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server/server.js"
+    "start": "nodemon server/server.js",
+    "dev": "env-cmd ./configs/dev.env nodemon server/server.js"
   },
   "repository": {
     "type": "git",
@@ -18,15 +19,24 @@
   },
   "homepage": "https://github.com/chilcho1939/service-mail#readme",
   "dependencies": {
+    "@sendgrid/mail": "^6.3.1",
+    "bcrypt": "^3.0.4",
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.2",
     "hbs": "^4.0.1",
+    "jsonwebtoken": "^8.4.0",
     "lodash": "^4.17.10",
+    "log4js": "^4.0.2",
     "moment": "^2.20.1",
+    "mongoose": "^5.4.10",
+    "mongoose-unique-validator": "^2.0.2",
     "morgan": "^1.9.0",
     "nodemailer": "^4.6.4",
     "socket.io": "^2.0.4",
     "tedious": "^2.1.5"
+  },
+  "devDependencies": {
+    "env-cmd": "^8.0.2"
   }
 }
