@@ -38,7 +38,7 @@ myApp.controller('LoginCtrl', ['$scope', 'LoginService', '$log', '$state', '$roo
         }
     }
 
-    $scope.login = function() {
+    $scope.iniciarSesion = function() {
         LoginService.login($scope.user).then(data => {
             if (data) {
                 $rootScope.$broadcast('userData', data);
