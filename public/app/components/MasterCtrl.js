@@ -1,9 +1,14 @@
-myApp.controller('MasterCtrl', ['$scope', '$rootScope', '$window', 'LoginService', '$state', function ($scope, $rootScope, $window, LoginService, $state) {
+myApp.controller('MasterCtrl', ['$scope', '$rootScope', '$window', 'LoginService', '$state', '$transitions', function ($scope, $rootScope, $window, LoginService, $state, $transitions) {
     $rootScope.isAuthenticated = LoginService.isLoggedIn();
     $scope.userLogged = $rootScope.isAuthenticated ? $rootScope.isAuthenticated : {};
 
     $scope.changeView = function (flag) {
         $rootScope.$broadcast('changeStatus', flag);
+    }
+
+    $scope.home = function (to) { 
+        $state.go('/home');
+        document.getElementById(to + '1').setAttribute('href', $rootScope.app.baseUrl + '/home#' + to);
     }
     $scope.logout = function () {
         LoginService.logout();

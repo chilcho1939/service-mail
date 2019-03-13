@@ -42,7 +42,7 @@ myApp.controller('LoginCtrl', ['$scope', 'LoginService', '$log', '$state', '$roo
         LoginService.login($scope.user).then(data => {
             if (data) {
                 $rootScope.$broadcast('userData', data);
-                $state.go('/');
+                $state.go('/home');
             } else {
                 $.notify('Error al iniciar sesión, usuario o contraseña no validos',
                     'error', { position: "top right" }
