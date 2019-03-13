@@ -1,6 +1,6 @@
 myApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function ($stateProvider, $urlRouterProvider, $httpProvider, LoginService) {
-    $stateProvider.state('/', {
-        url: '/',
+    $stateProvider.state('/home', {
+        url: '/home',
         templateUrl: 'app/components/home/Home.html',
         controller: 'HomeCtrl',
         authenticate: false

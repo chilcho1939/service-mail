@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="no-js">
 
 <head>
     <title>Mail service</title>
@@ -21,13 +21,93 @@
     <link rel="stylesheet" type="text/css" href="resources/css/general.css">
     <link rel="stylesheet" type="text/css" href="resources/css/switch.css">
     <link rel="stylesheet" type="text/css" href="resources/css/angular-material.min.css">
+
+    <style>
+        header {
+            padding: 156px 0 100px;
+        }
+
+        section {
+            padding: 150px 0;
+        }
+    </style>
     <!--===============================================================================================-->
-
-
 </head>
 
-<body ng-app="myApp" ng-controller="MasterCtrl">
+<body id="page-top" ng-app="myApp" ng-controller="MasterCtrl">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+        <div class="container">
+            <li ui-sref="/home" class="element-li">
+                <a class="navbar-brand logo-font">
+                    Servicio de correos
+                </a>
+            </li>
+
+            <!-- links toggle -->
+            <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#links"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- account toggle -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#account" aria-controls="navbarResponsive"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="links">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item element-li">
+                        <a id="about1" class="nav-link js-scroll-trigger" ng-click="home('about')">Acerca de</a>
+                    </li>
+                    <li class="nav-item element-li">
+                        <a id="services1" class="nav-link js-scroll-trigger" ng-click="home('services')">Servicios</a>
+                    </li>
+                    <li class="nav-item element-li">
+                        <a id="contact1" class="nav-link js-scroll-trigger" ng-click="home('contact')">Contacto</a>
+                    </li>
+                    <li id="accounts-lnk" class="nav-item element-li" ng-if="isAuthenticated">
+                        <a class="nav-link" ui-sref="accounts">Mis cuentas</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="collapse navbar-collapse" id="account">
+                <ul class="navbar-nav ml-auto" ng-if="!isAuthenticated">
+                    <li ui-sref="login" class="nav-item pointer"><a class="nav-link" ng-click="changeView(false);">Registrar</a></li>
+                    <li ui-sref="login" class="nav-item pointer"><a class="nav-link" ng-click="changeView(true);">Iniciar
+                            sesión</a></li>
+                </ul>
+                <ul class="navbar-nav ml-auto" ng-if="isAuthenticated">
+                    <li class="nav-item dropdown element-li">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            <span style="color:white;">{{userLogged.username}}</span>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="nav-link" ui-sref="accounts">
+                                <span style="color:black;">Mis cuentas</span></a>
+                            <a class="nav-link" ng-click="logout();">
+                                <span style="color:black;">Cerrar sesión</span></a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!--Content-->
+    <div ui-view></div>
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">Todos los derechos reservados &copy; Gildardo Ortiz</p>
+            <p class="m-0 text-center text-white"><i class="fa fa-paper-plane" aria-hidden="true"></i> Send And Delivery Mail Service</p>
+        </div>
+        <!-- /.container -->
+    </footer>
     <script type="text/javascript" src="resources/js/jquery.js"></script>
+    <script type="text/javascript" src="resources/js/jquery.easing.js"></script>
+    <script type="text/javascript" src="resources/js/jquery.easing.compatibility.js"></script>
     <script type="text/javascript" src="resources/js/notify.js"></script>
     <script type="text/javascript" src="resources/js/bootstrap.js"></script>
     <script type="text/javascript" src="resources/js/angular-1.7.6/angular.js"></script>
@@ -50,7 +130,6 @@
     <script src="resources/vendor/countdowntime/countdowntime.js"></script>
     <script src="resources/js/main.js"></script>
 
-
     <!--Configuration-->
     <script type="text/javascript" src="app/config/run.js"></script>
     <script type="text/javascript" src="app/config/config.state-provider.js"></script>
@@ -68,10 +147,8 @@
     <script type="text/javascript" src="app/components/login/LoginService.js"></script>
     <script type="text/javascript" src="app/components/account/AccountsService.js"></script>
     <script type="text/javascript" src="app/components/activation/ActivationService.js"></script>
-    <!--Site content-->
-    <!--Nav Bar-->
-    <div ng-include='"app/commons/layouts/header.html"'></div>
-    <div ui-view></div>
+
+    <script type="text/javascript" src="resources/js/custom/scrolling-nav.js"></script>
 </body>
 
 </html>
