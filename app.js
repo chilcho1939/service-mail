@@ -4,12 +4,13 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const cookierParser = require("cookie-parser");
 const app = express();
-const constants = require('./commons/Constants');
 const mongoConnection = require('./configs/database-connection');
+const ownMailServer = require('./configs/mail-server');
 
 /* Database connection */
 mongoConnection(process.env.MONGO_STRING_CONNECTION);
-
+/* Own mail server */
+ownMailServer.connect();
 //Api routes
 var mailServer = require('./routes/mailRoutes');
 var userRoutes = require('./routes/userRoutes');

@@ -32,7 +32,7 @@ myApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function 
         rol: ['*']
     });
     //default route
-    $urlRouterProvider.otherwise('/404');
+    $urlRouterProvider.otherwise('/home');
 
     $httpProvider.interceptors.push(['$q', '$location', '$window', function($q, $location, $window) {
         return {
