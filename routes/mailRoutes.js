@@ -92,7 +92,8 @@ router.post('/sendMail', (req, res) => {
                         logger.info("Correo envíado: " + info.response);
                         return res.status(200).json({
                             message: 'Correo envíado exitosamente',
-                            obj: info.response
+                            obj: info.response,
+                            code: 'ok'
                         });
                     }
                 });
