@@ -209,7 +209,7 @@ router.post('/generateToken', checkAuth, function (req, res, _next) {
         }, process.env.SECRET_WORD_TOKEN_GENERATION, {
             expiresIn: '365d'
         });
-        EmailTokens.find({email: req.params.email}).then(documents => {
+        EmailTokens.find({user: req.params.email}).then(documents => {
             if(documents.length > 0) {
                 return res.status(200).json({
                     message: "El usuario ya ha generado un token",
