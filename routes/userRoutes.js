@@ -105,7 +105,7 @@ router.post('/registrar', function (req, res, _next) {
                         text: 'Bienvenido',
                         html: `<p>Hola ${user.username}, bienvenido al servicio de correos para tu sitio web.</p>` +
                             '<p>Donde podrás integrar la funcionalidad de envío de correos a tu sitio web <strong>sin costo.</strong ></p>' +
-                            '<p>Para activar tu cuenta, por favor da click en la siguiente dirección: <a href="' + process.env.BASE_URL + ':' + process.env.PORT + '/#!/activate/' + user.temporaryToken + '">Activar cuenta</a></p>'
+                            '<p>Para activar tu cuenta, por favor da click en la siguiente dirección: <a href="' + process.env.BASE_URL + '/#!/activate/' + user.temporaryToken + '">Activar cuenta</a></p>'
                     };
                     mail.sendEmail(msg);
                     res.status(201).json({
