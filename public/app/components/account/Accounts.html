@@ -1,6 +1,6 @@
 <div class="container">
     <div class="limiter">
-        <div class="container-login100">
+        <div>
             <div class="wrap-generic">
                 <div id="loading-data" class="overlay">
                     <div layout="row" layout-align="center center" layout-padding>
@@ -11,17 +11,17 @@
                 <h1 class="text-center" style="padding-bottom: 5%;">Mi cuenta de correo</h1>
                 <form class="accountsForm" id="accountsForm" name="accountsForm" ng-if="showForm">
                     <div class="row">
-                        <div class="col-md-3 labels-account">
+                        <div class="col-sm labels-account">
                             <label><span style="color:red;">*</span>Host:</label>
                         </div>
-                        <div class="col-md-3 text-box-account">
+                        <div class="col-sm text-box-account">
                             <input type="text" id="host" class="form-control" ng-model="cuenta.host" placeholder="10.0.1.1 ó smtp.mail.com"
                                 required />
                         </div>
-                        <div class="col-md-3 labels-account">
+                        <div class="col-sm labels-account">
                             <label><span style="color:red;">*</span>Puerto:</label>
                         </div>
-                        <div class="col-md-3 text-box-account">
+                        <div class="col-sm text-box-account">
                             <input type="text" id="port" class="form-control" ng-model="cuenta.port" placeholder="9012"
                                 required />
                         </div>
@@ -62,7 +62,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-3 col-sm-3 col-2">
                             <div class="form-group">
                                 <span class="switch switch-sm">
                                     <input type="checkbox" class="switch" id="switch-sm" ng-model="cuenta.tls">
@@ -70,19 +70,19 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4 col-sm-3 col-2">
                             <div class="form-group">
                                 <span class="switch switch-sm">
                                     <input type="checkbox" class="switch" id="switch-sm" ng-model="cuenta.active">
-                                    <label for="switch-sm">Cuenta activa</label>
+                                    <label for="switch-sm">Activa</label>
                                 </span>
                             </div>
                         </div>
-                        <div class="col-md-3 text-right">
+                        <div class="col-md-3 col-sm-2 col-4 text-right">
                             <button class="btn btn-danger" ng-click="cancel();"><i class="fa fa-times" aria-hidden="true"></i>
                                 Cancelar</button>
                         </div>
-                        <div class="col-md-2 text-right">
+                        <div class="col-md-2 col-sm-2 col-4 text-right">
                             <button class="btn btn-primary" ng-click="guardar()"><i class="fa fa-floppy-o" aria-hidden="true"></i>
                                 Guardar</button>
                         </div>
@@ -108,8 +108,8 @@
                     </div>
                 </div>
                 <!-- Tabla de cuentas activas-->
-                <table class="table table-striped">
-                    <thead class="text-center">
+                <table class="table table-responsive table-striped">
+                    <thead class="thead-dark text-center">
                         <tr>
                             <th scope="col">Host</th>
                             <th scope="col">Puerto</th>
@@ -148,8 +148,8 @@
                                     class="fa fa-plus-circle" aria-hidden="true"></i></span> Generar Token</button>
                     </div>
                 </div>
-                <table class="table table-striped">
-                    <thead class="text-center">
+                <table class="table table-responsive table-striped">
+                    <thead class="thead-dark text-center">
                         <tr>
                             <th scope="col">Token</th>
                             <th scope="col">Eliminar</th>
