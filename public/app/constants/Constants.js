@@ -15,7 +15,8 @@ myApp.constant('Constants', {
     ENDPOINT_EDIT_ACCOUNT: "/accounts/updateAccount",
     ENDPOINT_ADD_ACCOUNT: "/accounts/saveAccount",
     ENDPOINT_DELETE_ACCOUNT: "/accounts/deleteAccount/",
-    ENDPOINT_GETBYID_ACCOUNT: "/accounts/getById/"
+    ENDPOINT_GETBYID_ACCOUNT: "/accounts/getById/",
+    ENDPOINT_CHANGE_PASSWORD: "/login/changePassword"
 
 
 });

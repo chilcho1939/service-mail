@@ -21,6 +21,12 @@ myApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function 
         controller: 'ActivationCtrl',
         authenticate: false,
         rol: ['*']
+    }).state('changePass', {
+        url: '/changepass',
+        templateUrl: 'app/components/account/PasswordChange.html',
+        controller: 'LoginCtrl',
+        authenticate: false,
+        rol: ['*']
     }).state('notFound', {
         url: '/404',
         templateUrl: 'app/commons/layouts/notFound.html',

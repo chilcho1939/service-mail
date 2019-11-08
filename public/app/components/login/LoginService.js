@@ -85,6 +85,22 @@ myApp.factory('LoginService', ['$rootScope', 'Constants', 'Utils', '$log', '$win
             }).catch(err => { 
                 $log.error("Error al eliminar el registro: " + err);
             });
+        }, changePassword: function(request){
+            return Utils.ApiRequest({
+                url: $rootScope.app.context + Constants.ENDPOINT_CHANGE_PASSWORD,
+                method: 'POST',
+                data: {
+                    email: request.email,
+                    password: request.password
+                }
+            }).then(response => {
+                if(response.data.code == Constants.SUCCESS_RESPONSE_CODE) {
+                    return {ok: true, message: response.data.message};
+                }
+            }).catch(err => {
+                $log.error("Error al actualizar la contraseña: " + err);
+                return {ok: false, message: err}
+            });
         }
     };
     return loginOperations;

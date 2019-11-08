@@ -17,7 +17,10 @@ router.get('/userData/:userId', checkAuth, function (req, res, _next) {
             message: "Id de usuario requerido"
         });
     }
-    User.findOne({ _id: req.params.userId, active: true }).then(user => {
+    User.findOne({
+        _id: req.params.userId,
+        active: true
+    }).then(user => {
         if (!user) {
             return res.status(400).json({
                 message: 'El usuario solicitado no existe'
@@ -39,7 +42,9 @@ router.get('/userData/:userId', checkAuth, function (req, res, _next) {
 
 router.post('/iniciarSesion', function (req, res, _next) {
     let fetchedUser;
-    User.findOne({ email: req.body.email }).then(user => {
+    User.findOne({
+        email: req.body.email
+    }).then(user => {
         if (!user) {
             logger.error("No se encontró el usuario");
             return res.status(401).json({
@@ -59,8 +64,8 @@ router.post('/iniciarSesion', function (req, res, _next) {
             email: fetchedUser.email,
             userId: fetchedUser._id
         }, process.env.SECRET_WORD, {
-                expiresIn: "1h"
-            });
+            expiresIn: "1h"
+        });
         res.status(200).json({
             code: 'ok',
             token: token,
@@ -78,7 +83,9 @@ router.post('/iniciarSesion', function (req, res, _next) {
 });
 
 router.post('/registrar', function (req, res, _next) {
-    User.findOne({ email: req.body.email }).then(user => {
+    User.findOne({
+        email: req.body.email
+    }).then(user => {
         if (user) {
             logger.error("Error al registrar usuario, ya existe cuenta");
             return res.status(401).json({
@@ -93,7 +100,7 @@ router.post('/registrar', function (req, res, _next) {
                 temporaryToken: jwt.sign({
                     email: req.body.email
                 }, process.env.SECRET_WORD, {
-                        expiresIn: "1h"
+                    expiresIn: "1h"
                 })
             });
             user.save().then(document => {
@@ -132,7 +139,9 @@ router.post('/registrar', function (req, res, _next) {
  */
 router.put('/activateAccount/:token', function (req, res, _next) {
     logger.info("Activando cuenta");
-    User.findOne({ temporaryToken: req.params.token }, function (err, user) {
+    User.findOne({
+        temporaryToken: req.params.token
+    }, function (err, user) {
         if (err) {
             logger.error("Error: " + err);
             return res.status(500).json({
@@ -186,7 +195,7 @@ router.put('/activateAccount/:token', function (req, res, _next) {
 });
 
 router.post('/generateToken', checkAuth, function (req, res, _next) {
-    if (!req.body.email) { 
+    if (!req.body.email) {
         return res.status(401).json({
             message: "Error, correo requerido"
         });
@@ -196,7 +205,7 @@ router.post('/generateToken', checkAuth, function (req, res, _next) {
         registrationUser: req.body.email,
         active: true
     }).then(account => {
-        if (!account) { 
+        if (!account) {
             logger.error("Sin resultados para el usuario, favor de revisar");
             return res.status(404).json({
                 message: "Sin resultados para el usuario, favor de validar"
@@ -209,15 +218,17 @@ router.post('/generateToken', checkAuth, function (req, res, _next) {
         }, process.env.SECRET_WORD_TOKEN_GENERATION, {
             expiresIn: '365d'
         });
-        EmailTokens.find({user: req.params.email}).then(documents => {
-            if(documents.length > 0) {
+        EmailTokens.find({
+            user: req.params.email
+        }).then(documents => {
+            if (documents.length > 0) {
                 return res.status(200).json({
                     message: "El usuario ya ha generado un token",
                     code: 'ok'
                 });
             }
             const userToken = new EmailTokens({
-                token: token, 
+                token: token,
                 user: req.body.email
             });
             userToken.save().then(_doc => {
@@ -225,9 +236,9 @@ router.post('/generateToken', checkAuth, function (req, res, _next) {
                     message: "Token generado exitosamente",
                     code: 'ok',
                     result: token
-                });  
+                });
             }).catch(err => {
-                logger.error("Error al crear nuevo registro de token: "+ err);
+                logger.error("Error al crear nuevo registro de token: " + err);
                 return res.status(501).json({
                     message: "Error registrando nuevo token"
                 });
@@ -248,7 +259,9 @@ router.get('/tokensByUser/:email', checkAuth, function (req, res, _next) {
             message: "Usuario requerido"
         });
     }
-    EmailTokens.find({user: req.params.email}).then(documents => {
+    EmailTokens.find({
+        user: req.params.email
+    }).then(documents => {
         var arrTemp = [];
         documents.forEach((item) => {
             var temp = item.token[0].split('.');
@@ -267,7 +280,7 @@ router.get('/tokensByUser/:email', checkAuth, function (req, res, _next) {
 
 router.delete('/deleteToken/:id', checkAuth, function (req, res) {
     if (!req.params.id || req.params.id == '') {
-        return res.status(403).json({
+        return res.status(401).json({
             message: "Se requiere identificador"
         });
     }
@@ -281,6 +294,51 @@ router.delete('/deleteToken/:id', checkAuth, function (req, res) {
             code: 'ok'
         });
     })
+});
+
+router.post('/changePassword', function (req, res) {
+    if (!req.body.email || !req.body.password) {
+        logger.error("Parametros incompletos, favor de validar");
+        return res.status(401).json({
+            message: "Parámetros incompletos, correo o contraseña"
+        });
+    }
+    try {
+        User.findOne({
+            email: req.body.email
+        }).then(user => {
+            if (!user) {
+                return res.status(400).json({
+                    message: 'El usuario solicitado no existe'
+                });
+            }
+            bcrypt.hash(req.body.password, 10).then(hash => {
+                user.password = hash;
+                user.save((err) => {
+                    if (err) throw "Error al cambiar la contraseña. Error: " + err;
+                    logger.info("Contraseña modificada exitosamente");
+                    logger.info("Enviando correo a: " + req.body.email);
+                    const msg = {
+                        to: req.body.email,
+                        subject: 'Aviso de cambio de contraseña',
+                        text: 'Cambio de contraseña',
+                        html: `<p>Hola ${user.username}, recientemente cambiaste tu contraseña. Gracias por utilizar nuestros servicio</p>`
+                    };
+                    mail.sendEmail(msg);
+                    return res.status(200).json({
+                        message: "Contraseña modificada exitosamente",
+                        code: 'ok'
+                    });
+                });
+            });
+        });
+    } catch (e) {
+        logger.error(e);
+        return res.status(500).json({
+            message: "Error actualizando la contraseña",
+            err: e
+        });
+    }
 });
 
 module.exports = router;

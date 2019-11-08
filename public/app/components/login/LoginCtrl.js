@@ -20,8 +20,8 @@ myApp.controller('LoginCtrl', ['$scope', 'LoginService', '$log', '$state', '$roo
         });
     };
 
-    $scope.comparePasswords = function () { 
-        if (!$scope.login && $scope.user.password) { 
+    $scope.comparePasswords = function (flag) { 
+        if ((!$scope.login && $scope.user.password) || flag) { 
             validatePasswords();
         }
     }
@@ -43,6 +43,7 @@ myApp.controller('LoginCtrl', ['$scope', 'LoginService', '$log', '$state', '$roo
             if (data) {
                 $rootScope.$broadcast('userData', data);
                 $state.go('/home');
+                $scope.user = {};
             } else {
                 $.notify('Error al iniciar sesión, usuario o contraseña no validos',
                     'error', { position: "top right" }
@@ -61,6 +62,25 @@ myApp.controller('LoginCtrl', ['$scope', 'LoginService', '$log', '$state', '$roo
         resultText.text("");
         $scope.login = data;
     };
+
+    $scope.changePass = function(){
+        $state.go('changePass');
+    }
+
+    $scope.cambiarPass = function(){
+        if(!$scope.user.password || !$scope.user.confirmPassword || !$scope.user.email) {
+            $.notify('Datos incompletos, favor de validar', 'warning', {position: "top right"});
+            return;
+        }
+        LoginService.changePassword($scope.user).then(data => {
+            if(data.ok) {
+                $.notify(data.message, 'success', {position: "top right"});
+                $scope.user = {};
+                $state.go('login');
+            }
+            else $.notify(data.message, 'error', {position: "top right"});
+        });
+    }
 
     $scope.$on('changeStatus', function(event, data) {
         event.preventDefault();
