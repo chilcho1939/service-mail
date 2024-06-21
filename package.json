@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "engines": {
     "node": "6.17.1"
-  }
+  },
   "description": "Software that send an email to some smpt server",
   "main": "index.js",
   "scripts": {
