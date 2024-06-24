@@ -6,9 +6,10 @@ const cookierParser = require("cookie-parser");
 const app = express();
 const mongoConnection = require('./configs/database-connection');
 const ownMailServer = require('./configs/mail-server');
+const uri = "mongodb+srv://chilcho:Chilcho19@betos-trucking.wamveod.mongodb.net/?retryWrites=true&w=majority&appName=betos-trucking";//cambiar
 
 /* Database connection */
-mongoConnection(process.env.MONGO_STRING_CONNECTION);
+mongoConnection(uri);
 /* Own mail server */
 ownMailServer.connect();
 //Api routes
