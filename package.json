@@ -2,7 +2,7 @@
   "name": "mail-sender",
   "version": "1.0.0",
   "engines": {
-    "node": "9.11.2"
+    "node": "10.24.1"
   },
   "description": "Software that send an email to some smpt server",
   "main": "index.js",
